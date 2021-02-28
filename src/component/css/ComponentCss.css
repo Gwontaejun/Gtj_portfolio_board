@@ -1,0 +1,45 @@
+.dashboard {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+}
+.dashBoardDiv {
+    display: flex;
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+}
+.nav {
+    display:inline-block;
+    width:25%;
+    height:100%;
+    margin: 0px;
+    padding: 0px;
+}
+.header {
+}
+.section {
+    width:75%;
+    height:100%;
+    margin: 0px;
+    padding: 0px;
+}
+.section_Button {
+    display:inline-block;
+    width:100%;
+    height:70%;
+    margin: 0px;
+    padding: 0px;
+}
+
+.Appbar {
+    width:500px;
+}
+
+.App{
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+}
