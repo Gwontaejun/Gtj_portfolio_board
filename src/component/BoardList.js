@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
-import Section from './Section';
 
-class Dashboard extends Component {
+class BoardList extends Component {
   render() {
+    const { params } = this.props.match;
     return (
       <div className={"Boardmain"}>
         <div className={"BoardmainWraper"}>
-          <Section/>
+          {console.log(params.BoardCode)}
         </div>
       </div>
     );
   }
 }
 
-export default Dashboard;
+export default BoardList;

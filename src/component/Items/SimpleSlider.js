@@ -7,35 +7,21 @@ import '../css/_slick.css';
 export default class SimpleSlider extends Component {
   render() {
     var settings = {
-        dots: true,
+        dots: false,
         infinite: true,
         slidesToShow: 1,
         slidesToScroll: 1,
-        autoplay: true,
-        autoplaySpeed: 2000,
-        pauseOnHover: true
+        autoplaySpeed: 3000,
+        autoplay:true,
+        pauseOnHover: true,
+        arrows: false
     };
     return (
-      <div style={{width: "50%", display:"inline-block"}}>
+      <div className={"slider_div"}>
         <Slider {...settings}>
-            <div>
-                <h3><a href="#">주요뉴스111111111111</a></h3>
-            </div>
-            <div>
-                <h3>주요뉴스1112222222221</h3>
-            </div>
-            <div>
-                <h3>주요뉴스1133333331</h3>
-            </div>
-            <div>
-                <h3>주요뉴스1444444444</h3>
-            </div>
-            <div>
-                <h3>주요뉴스5555555555555</h3>
-            </div>
-            <div>
-                <h3>주요뉴스6</h3>
-            </div>
+          {this.props.sliderData.map((obj) => {
+            return <div><a style={{textDecoration:"none"}} href={obj.link}><h3 style={{color:this.props.color}}>{obj.text}</h3></a></div>
+          })}
         </Slider>
       </div>
     );

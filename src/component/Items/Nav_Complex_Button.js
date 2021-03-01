@@ -2,8 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import Typography from '@material-ui/core/Typography';
-import FittedImage from 'react-fitted-image'
-
+import FittedImage from 'react-fitted-image';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,7 +22,6 @@ const useStyles = makeStyles((theme) => ({
         opacity: 0.15,
       },
       '& $imageMarked': {
-        opacity: 0,
       },
       '& $imageTitle': {
         border: '4px solid currentColor',
@@ -61,23 +59,19 @@ const useStyles = makeStyles((theme) => ({
     opacity: 0.4,
     transition: theme.transitions.create('opacity'),
   },
-  imageTitle: {
-    position: 'relative',
-    padding: `${theme.spacing(2)}px ${theme.spacing(4)}px ${theme.spacing(1) + 6}px`,
-  },
   imageMarked: {
     height: 3,
     width: 18,
     backgroundColor: theme.palette.common.white,
     position: 'absolute',
-    bottom: -2,
+    bottom: 10,
     left: 'calc(50% - 9px)',
     transition: theme.transitions.create('opacity'),
   },
 }));
 
 export default function ButtonBases(props) {
-  const { fit, url, title, width, height } = props;
+  const { url, title, width, height } = props;
 
   const classes = useStyles();
 
@@ -94,7 +88,10 @@ export default function ButtonBases(props) {
         }}
       >
         <FittedImage
-          fit={fit}
+          fit="cover"
+          loader={<div>Loading</div>}
+          onLoad={(...args) => console.log(...args)}
+          onError={(...args) => console.log(...args)}
           src={url}
           className={classes.imageSrc}
         />
@@ -106,9 +103,9 @@ export default function ButtonBases(props) {
             color="inherit"
             className={classes.imageTitle}
           >
-            <h1>
-            {title}
-            </h1>
+            <h2>
+              {title}
+            </h2>
             <span className={classes.imageMarked} />
           </Typography>
         </span>
