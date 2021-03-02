@@ -4,8 +4,8 @@ import Section from './Section';
 class Dashboard extends Component {
   render() {
     return (
-      <div className={"Boardmain"}>
-        <div className={"BoardmainWraper"}>
+      <div className={"boardMain"}>
+        <div className={"boardMainWraper"}>
           <Section/>
         </div>
       </div>

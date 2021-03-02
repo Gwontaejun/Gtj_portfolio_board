@@ -65,3 +65,10 @@
     margin-left: 3%;
     margin-right: 1%;
 }
+
+.Logined {
+  display:none;
+}
+.NotLogined {
+  display:block;
+}

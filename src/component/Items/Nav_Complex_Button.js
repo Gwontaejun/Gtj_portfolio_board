@@ -103,7 +103,7 @@ export default function ButtonBases(props) {
             color="inherit"
             className={classes.imageTitle}
           >
-            <h2>
+            <h2 style={{color:'white'}}>
               {title}
             </h2>
             <span className={classes.imageMarked} />

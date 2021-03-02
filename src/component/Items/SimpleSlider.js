@@ -17,10 +17,10 @@ export default class SimpleSlider extends Component {
         arrows: false
     };
     return (
-      <div className={"slider_div"}>
+      <div className={"slider_Div"}>
         <Slider {...settings}>
-          {this.props.sliderData.map((obj) => {
-            return <div><a style={{textDecoration:"none"}} href={obj.link}><h3 style={{color:this.props.color}}>{obj.text}</h3></a></div>
+          {this.props.sliderData.map((data) => {
+            return <div key={""}><a style={{textDecoration:"none"}} href={data.link}><h3 style={{color:this.props.color}}>{data.text}</h3></a></div>
           })}
         </Slider>
       </div>

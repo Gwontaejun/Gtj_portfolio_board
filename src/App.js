@@ -7,7 +7,7 @@ import Header from '../src/component/Header';
 import NavBar from '../src/component/NavBar';
 import './component/css/ComponentCss.css';
 import './component/css/itemCss.css';
-import store from './store/store';
+import store from './component/store/store';
 
 class App extends Component {
   constructor(props){
@@ -24,31 +24,47 @@ class App extends Component {
 
   render() {
     let mode = this.state.mode;
-    let modeClassName = "";
+    let headerClassName = "";
+    let DarkorLightMode = "";
+    let ButtonType = "";
+    let ButtonText = "";
+    let ButtonColor = "";
     let backgroundColor = "";
+    let color = "";
+
     if(mode === true){
-      modeClassName = "headerLightMode";
+      headerClassName = "header_LightMode";
+      DarkorLightMode = "lightmode";
+      ButtonType = "contained";
+      ButtonText = "다크 모드로";
+      ButtonColor = "primary";
       backgroundColor = "white";
+      color = "black";
     }else if(mode === false){
-      modeClassName = "headerDarkMode";
+      headerClassName = "header_DarkMode";
+      DarkorLightMode = "darkmode";
+      ButtonType = "outlined";
+      ButtonText = "라이트 모드로";
+      ButtonColor = "inherit";
       backgroundColor = "#1e1f21";
+      color = "white";
     }
     
     return (
       <BrowserRouter>
-        <div className="App" style={{backgroundColor:backgroundColor}}>
-        <div>
-          <Header header_Background={modeClassName}/>
-        </div>
-        <div style={{display:"flex", height:"90.5%", margin:"auto"}}>
-          <div className={"app_navbar"}>
-            <NavBar/>
+        <div className="app" style={{ backgroundColor: backgroundColor, color: color }}>
+          <div>
+            <Header header_Background={headerClassName} ButtonType={ButtonType} ButtonText={ButtonText} ButtonColor={ButtonColor} color={color} />
           </div>
+          <div className={DarkorLightMode} style={{ display: "flex", height: "90.5%", margin: "auto" }}>
+            <div className={"app_Navbar"}>
+              <NavBar />
+            </div>
             <Switch>
               <Route exact path="/" component={DashBoard} />
               <Route exact path="/:BoardCode" component={BoardList} />
             </Switch>
-        </div>
+          </div>
         </div>
       </BrowserRouter>
     );

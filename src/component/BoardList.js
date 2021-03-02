@@ -4,8 +4,8 @@ class BoardList extends Component {
   render() {
     const { params } = this.props.match;
     return (
-      <div className={"Boardmain"}>
-        <div className={"BoardmainWraper"}>
+      <div className={"boardMain"}>
+        <div className={"boardMainWraper"}>
           {console.log(params.BoardCode)}
         </div>
       </div>

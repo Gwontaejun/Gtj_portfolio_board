@@ -8,13 +8,13 @@ import Freedom from './image/Freedom.jpg'
 import Humor from './image/Humor.jpg'
 import Question from './image/Question.jpg'
 import { Link } from 'react-router-dom';
-import store from '../store/store';
+import store from '../component/store/store';
 
 
 class Section extends Component {
     constructor(props) {
         super(props);
-
+        
         this.state = {
             mode: true,
             weatherSliderData: [
@@ -45,12 +45,12 @@ class Section extends Component {
 
         return (
             <div className={"section"}>
-                <div className={"section_item_wraper"}>
-                    <div className={"section_top"}>
-                        <h3 className={"news"} style={{ color: fontColor }}>주요뉴스 > </h3>
-                        <SimpleSlider sliderData={this.state.weatherSliderData} color={fontColor}/>
-                        <h3 className={"weather"} style={{ color: fontColor }}>날씨 > </h3>
-                        <SimpleSlider sliderData={this.state.newsSliderData} color={fontColor}/>
+                <div className={"section_Item_Wraper"}>
+                    <div className={"section_Top"}>
+                        <h3 className={"news"} >주요뉴스 > </h3>
+                        <SimpleSlider sliderData={this.state.weatherSliderData} />
+                        <h3 className={"weather"} >날씨 > </h3>
+                        <SimpleSlider sliderData={this.state.newsSliderData} />
                     </div>
                     {/* 이미지 버튼(게시판 목록 버튼) */}
                     <div className={"section_Button"}>
