@@ -15,10 +15,11 @@ class Header extends Component {
     this.state = {
       Text: "다크 모드로",
     }
+  }
 
+  componentWillMount() {
     store.subscribe(function () {
       this.setState({ Text: store.getState().Text });
-      this.setState({ ButtonType: store.getState().ButtonType });
     }.bind(this));
   }
 
@@ -31,20 +32,19 @@ class Header extends Component {
             <Toolbar className={this.props.header_Background}>
               <div className={"header_Left"}>
                 <Typography variant="h3">
-                  <Link to="/" style={{ color: this.props.color }}>
+                  <Link to="/" style={{ color: "white", marginLeft: "15%" }}>
                     GTJ
                   </Link>
                 </Typography>
               </div>
               <div className={"header_Right"}>
-                <Button variant={this.props.ButtonType} color={this.props.ButtonColor} onClick={function () {
-                  store.dispatch({ type: 'ModeConverter' });
-                }}
-                >{this.props.ButtonText}</Button> {/*다크모드 및 라이트모드 버튼*/}
-                <Typography variant="h6">
-                  {JSON.parse(window.localStorage.getItem("LoginData")).displayName}님 어서오세요!
-                </Typography>
                 <LoginoutButton ButtonType={this.props.ButtonType} ButtonColor={this.props.ButtonColor} /> {/*로그인 및 로그아웃 버튼*/}
+                <div style={{display:"flex", alignItems:"center", width:"7.5%",}}>
+                  <Button variant={this.props.ButtonType} color={this.props.ButtonColor} onClick={function () {
+                    store.dispatch({ type: 'ModeConverter' });
+                  }}
+                  >{this.props.ButtonText}</Button> {/*다크모드 및 라이트모드 버튼*/}
+                </div>
               </div>
             </Toolbar>
           </AppBar>

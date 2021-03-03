@@ -16,12 +16,14 @@ class App extends Component {
     this.state = {
       mode : true,
     }
+  }
 
+  componentWillMount() {
     store.subscribe(function() {
       this.setState({mode : store.getState().mode});
     }.bind(this));
   }
-
+  
   render() {
     let mode = this.state.mode;
     let headerClassName = "";
@@ -30,7 +32,6 @@ class App extends Component {
     let ButtonText = "";
     let ButtonColor = "";
     let backgroundColor = "";
-    let color = "";
 
     if(mode === true){
       headerClassName = "header_LightMode";
@@ -39,7 +40,6 @@ class App extends Component {
       ButtonText = "다크 모드로";
       ButtonColor = "primary";
       backgroundColor = "white";
-      color = "black";
     }else if(mode === false){
       headerClassName = "header_DarkMode";
       DarkorLightMode = "darkmode";
@@ -47,14 +47,13 @@ class App extends Component {
       ButtonText = "라이트 모드로";
       ButtonColor = "inherit";
       backgroundColor = "#1e1f21";
-      color = "white";
     }
     
     return (
       <BrowserRouter>
-        <div className="app" style={{ backgroundColor: backgroundColor, color: color }}>
+        <div className="app" style={{ backgroundColor: backgroundColor }}>
           <div>
-            <Header header_Background={headerClassName} ButtonType={ButtonType} ButtonText={ButtonText} ButtonColor={ButtonColor} color={color} />
+            <Header header_Background={headerClassName} ButtonType={ButtonType} ButtonText={ButtonText} ButtonColor={ButtonColor} />
           </div>
           <div className={DarkorLightMode} style={{ display: "flex", height: "90.5%", margin: "auto" }}>
             <div className={"app_Navbar"}>

@@ -28,7 +28,9 @@ class Section extends Component {
                 { link: "/", text: "주요 뉴스3" }
             ]
         }
+    }
 
+    componentWillMount() {
         store.subscribe(function () {
             this.setState({ mode: store.getState().mode });
         }.bind(this));

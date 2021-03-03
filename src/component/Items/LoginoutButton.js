@@ -1,7 +1,6 @@
 import { Component } from "react";
-import firebase from 'firebase/app';
-import 'firebase/auth';
-import store from '../store/store';
+import firestore from '../store/fireStore';
+import firebase from 'firebase/app'
 import Button from '@material-ui/core/Button';
 
 class LoginoutButton extends Component {
@@ -15,58 +14,28 @@ class LoginoutButton extends Component {
         this.Loginout = this.Loginout.bind(this);
     }
 
-    /*해당 render 메소드가 호출이 되기전에 실행되는 함수
-      fireAuth의 데이터를 받아옴.*/
-    componentWillMount() {
-        let config = {
-            apiKey: "AIzaSyBwK8X-hhD19OhO3lQ_mh3u3hzsF_OK9i0",
-            authDomain: "gtj-portfolio-board.firebaseapp.com",
-            databaseURL: "https://gtj-portfolio-board-default-rtdb.firebaseio.com",
-            projectId: "gtj-portfolio-board",
-            storageBucket: "gtj-portfolio-board.appspot.com",
-            messagingSenderId: "480993912995",
-            appId: "1:480993912995:web:e6f46a40a2b556e7f37716",
-            measurementId: "G-Z2Z053PQZX"
-        };
-
-        firebase.initializeApp(config);
-
-        firebase.auth().onAuthStateChanged(function (user) {
-            if (user) {
-            } else {
-            }
-        });
-    }
-
     /*로그인 및 로그아웃 함수*/
     Loginout() {
-        const currentUser = firebase.auth().currentUser
+        const currentUser = firestore.firestore.auth().currentUser;
+        
         if (this.state.LoginData === null) {
             if (currentUser === null) {
                 var provider = new firebase.auth.GoogleAuthProvider();
-                firebase
-                    .auth()
-                    .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
-                    .then(() => {
-                        return firebase.auth()
-                            .signInWithPopup(provider)
-                            .then((result) => {
-                                var credential = result.credential;
-                                var user = result.user;
-                                window.localStorage.setItem("LoginData", JSON.stringify(user));
-                                this.setState({LoginData: window.localStorage.getItem("LoginData")});
-                            }).catch((error) => {
-                                console.log("error", error);
-                            });
-                    })
-                    .catch((error) => {
+                firestore.firestore.auth()
+                    .signInWithPopup(provider)
+                    .then((result) => {
+                        var user = result.user;
+                        window.localStorage.setItem("LoginData", JSON.stringify(user));
+                        this.setState({ LoginData: window.localStorage.getItem("LoginData") });
+                    }).catch((error) => {
+                        console.log("error", error);
                     });
             } else if (currentUser !== null) {
             }
         } else if (this.state.LoginData !== null) {
-            firebase.auth().signOut().then(() => {
+            firestore.firestore.auth().signOut().then(() => {
                 window.localStorage.removeItem("LoginData");
-                this.setState({LoginData: null});
+                this.setState({ LoginData: null });
             }).catch((error) => {
             });
         }
@@ -74,16 +43,25 @@ class LoginoutButton extends Component {
 
     render() {
         let ButtonText = '';
+        let NameType = '';
+        let NameText = '';
 
         /*로그인상태인지 확인함.*/
         if (this.state.LoginData === null) {
             ButtonText = "Login";
+            NameType = "none";
+            NameText = '';
         } else if (this.state.LoginData !== null) {
             ButtonText = "Logout";
+            NameText = JSON.parse(window.localStorage.getItem("LoginData")).displayName + "님 어서오세요!";
+            NameType = "inline-block";
+
+            console.log(NameText);
         }
-        
+
         return (
-            <div>
+            <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", marginRight: "2%", width: "40%" }}>
+                <div style={{ display: NameType, marginRight: "5%" }}><h2>{NameText}</h2></div>
                 <Button color={this.props.ButtonColor} variant={this.props.ButtonType} onClick={this.Loginout}>{ButtonText}</Button>
             </div>
         )
