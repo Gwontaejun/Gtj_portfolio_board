@@ -4,7 +4,4 @@
 
 
 기술스택
--Html
--Css
--React
--Firebase
+Html,Css,React,Firebase
