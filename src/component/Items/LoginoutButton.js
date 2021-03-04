@@ -50,7 +50,6 @@ class LoginoutButton extends Component {
         if (this.state.LoginData === null) {
             ButtonText = "Login";
             NameType = "none";
-            NameText = '';
         } else if (this.state.LoginData !== null) {
             ButtonText = "Logout";
             NameText = JSON.parse(window.localStorage.getItem("LoginData")).displayName + "님 어서오세요!";

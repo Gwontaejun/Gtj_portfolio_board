@@ -61,7 +61,8 @@ class App extends Component {
             </div>
             <Switch>
               <Route exact path="/" component={DashBoard} />
-              <Route exact path="/:BoardCode" component={BoardList} />
+              <Route exact path="/:Board_Theme" component={BoardList} />
+              <Route exact path="/Read/:Board_Code" component={BoardList} />
             </Switch>
           </div>
         </div>
