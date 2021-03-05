@@ -30,7 +30,7 @@ class CountList extends Component {
                 getRowId={(row) => row.Board_No}
                 columns={[
                   { field: 'rowIndex', headerName: "순위", flex: 0.2, align:"right", sortable:false,
-                    renderCell: (params: GridCellParams) => (
+                    renderCell: (params) => (
                       <div>
                         {params.rowIndex+1}
                       </div>
@@ -38,7 +38,7 @@ class CountList extends Component {
                   },
                   {
                     field: 'Board_Title', headerName: "글 제목", flex: 0.5, sortable:false,
-                    renderCell: (params: GridCellParams) => (
+                    renderCell: (params) => (
                       <div style={{height:"100%", width:"100%", textAlign:"left"}}>
                       <a href={"/Read/"+params.row.Board_Code} style={{height:"100%", width:"100%", textDecoration:"none"}} onClick={()=>{
                         console.log("hi", params);
@@ -52,6 +52,7 @@ class CountList extends Component {
                 disableColumnMenu
                 hideFooter
                 autoHeight
+                showColumnRightBorder={true}
               />
             {/* {this.state.data.map((item, index) => (
               <Typography variant="h5" style={{marginTop:"3%", marginLeft:"5%", height:"16%"}} key={item.Board_Code}>{index+1}.<a href={"/Read/"+item.Board_Code}>{item.Board_Title}</a></Typography>

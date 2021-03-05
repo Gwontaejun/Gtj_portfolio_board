@@ -37,6 +37,7 @@ class Section extends Component {
     }
 
     render() {
+        console.log("section render");
         let mode = this.state.mode;
         let fontColor = "";
         if (mode === true) {
