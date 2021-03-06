@@ -3,6 +3,8 @@ import firestore from './store/fireStore';
 import './css/itemCss.css';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
+import { Link } from 'react-router-dom';
+import { Button, ButtonGroup } from '@material-ui/core';
 
 class BoardRead extends Component {
     constructor(props) {
@@ -15,6 +17,12 @@ class BoardRead extends Component {
 
     componentWillMount() {
         this.firebaseSetting();
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (this.props.match.params.Board_Code !== prevProps.match.params.Board_Code) {
+            this.firebaseSetting();
+        }
     }
 
     firebaseSetting() {
@@ -39,7 +47,6 @@ class BoardRead extends Component {
                         case "BTB": this.setState({ board_Title: "자랑게시판" });
                             break;
                     }
-                    // console.log("Board_Theme", Board_Theme);
                     this.setState({ board_Data: doc.data(), board_WriteDate: fullDate });
                 });
             });
@@ -53,7 +60,7 @@ class BoardRead extends Component {
                     <div className={"boardList"}>
                         <div className={"boardList_Top"}>
                             <div className={"boardList_Top_Left"}>
-                                <h3 style={{ height: "80%", position: "absolute", bottom: 0 }}><a href={"/" + this.state.board_Data.Board_Theme}>{this.state.board_Title}</a></h3>
+                                <h3 style={{ height: "80%", position: "absolute", bottom: 0 }}><Link to={"/Theme/" + this.state.board_Data.Board_Theme}>{this.state.board_Title}</Link></h3>
                                 <h2 style={{ fontSize: "200%", marginBottom: "-0.5%", height: "85%", position: "absolute", bottom: 0 }}>{this.state.board_Data.Board_Title}</h2>
                                 <div style={{ width: "100%", height: "35%", position: "absolute", bottom: 0 }}>
                                     <h4 style={{ display: "inline-block", margin: "0px", marginRight: "1%" }}>작성자 : {this.state.board_Data.User_Title}</h4>/
@@ -61,7 +68,10 @@ class BoardRead extends Component {
                                 </div>
                             </div>
                             <div className={"boardList_Top_Right"}>
-
+                                <ButtonGroup variant="contained" color="primary" style={{ marginBottom: "0px", width: "100%", position: "absolute", bottom: 13 }}>
+                                    <Button style={{ width: "50%" }}><h2>수정</h2></Button>
+                                    <Button style={{ width: "50%" }}><h2>삭제</h2></Button>
+                                </ButtonGroup>
                             </div>
                         </div>
                         <div className={"boardList_Bottom"}>

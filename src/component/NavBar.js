@@ -12,10 +12,10 @@ class NavBar extends Component {
             <div className={"nav"}>
                 <div className={"nav_Item_Wraper"}>
                     <div className={"nav_Item_Top"}>
-                        <Link to="/FTB"><HoverSlider url={Freedom} firstText={"시간날때마다 보는?"} secondText={"자유게시판"} /></Link>
-                        <Link to="/HTB"><HoverSlider url={Humor} firstText={"재밌는걸 보고싶을땐?"} secondText={"유머게시판"} /></Link>
-                        <Link to="/QTB"><HoverSlider url={Question} firstText={"모르는게 있을땐?"} secondText={"질문게시판"} /></Link>
-                        <Link to="/BTB"><HoverSlider url={Freedom} firstText={"나 이정도야~ 하고싶을때!"} secondText={"자랑게시판"} /></Link>
+                        <Link to="/Theme/FTB"><HoverSlider url={Freedom} firstText={"시간날때마다 보는?"} secondText={"자유게시판"} /></Link>
+                        <Link to="/Theme/HTB"><HoverSlider url={Humor} firstText={"재밌는걸 보고싶을땐?"} secondText={"유머게시판"} /></Link>
+                        <Link to="/Theme/QTB"><HoverSlider url={Question} firstText={"모르는게 있을땐?"} secondText={"질문게시판"} /></Link>
+                        <Link to="/Theme/BTB"><HoverSlider url={Freedom} firstText={"나 이정도야~ 하고싶을때!"} secondText={"자랑게시판"} /></Link>
                     </div>
                     <div className={"nav_Item_Bottom"}>
                         <div className={"nav_Item_Bottom_First"}>

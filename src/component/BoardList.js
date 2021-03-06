@@ -4,6 +4,7 @@ import firestore from './store/fireStore';
 import './css/itemCss.css';
 import { Button } from '@material-ui/core';
 import AddCircleOutlineOutlined from '@material-ui/icons/AddCircleOutlineOutlined';
+import { Link } from 'react-router-dom';
 
 class BoardList extends Component {
   constructor(props) {
@@ -14,6 +15,12 @@ class BoardList extends Component {
     this.firebaseSetting = this.firebaseSetting.bind(this);
   }
 
+  /*React Life Cycle의 한부분으로
+      렌더링이 되기전에 호출되는 메소드.
+      렌더를 하기전에 this.firebaseSetting을 호출함.*/
+  componentWillMount() {
+    this.firebaseSetting();
+  }
 
   /*React Life Cycle의 한부분으로
     렌더링이 다 되었을때 실행되는 메소드.
@@ -24,13 +31,6 @@ class BoardList extends Component {
 
       this.firebaseSetting();
     }
-  }
-
-  /*React Life Cycle의 한부분으로
-    렌더링이 되기전에 호출되는 메소드.
-    렌더를 하기전에 this.firebaseSetting을 호출함.*/
-  componentWillMount() {
-    this.firebaseSetting();
   }
 
   /*파이어베이스의 파이어스토어의 값을 불러와서
@@ -72,9 +72,12 @@ class BoardList extends Component {
                 <h2 style={{ fontSize: "300%", marginBottom: "0px", height: "70%", position: "absolute", bottom: 0 }}>{this.state.board_Title}</h2>
               </div>
               <div className={"boardList_Top_Right"}>
-                <Button startIcon={<AddCircleOutlineOutlined/>} color={"primary"} variant={"contained"} style={{ marginBottom: "0px", width:"100%", position: "absolute", bottom: 13 }}>
-                  <h2 >글쓰기</h2>
-                </Button>
+                <Link to="/Write">
+                  <Button startIcon={<AddCircleOutlineOutlined />} color={"primary"} variant={"contained"}
+                    style={{ marginBottom: "0px", width: "100%", position: "absolute", bottom: 13 }}>
+                    <h2>글쓰기</h2>
+                  </Button>
+                </Link>
               </div>
             </div>
             <div className={"boardList_Bottom"}>
@@ -86,9 +89,9 @@ class BoardList extends Component {
                     field: 'Board_Title', headerName: "글 제목", flex: 1,
                     renderCell: (params) => (
                       <div style={{ height: "100%", width: "100%", textAlign: "left" }}>
-                        <a href={"/Read/" + params.row.Board_Code} style={{ height: "100%", width: "100%", textDecoration: "none" }} onClick={() => {
+                        <Link to={"/Read/" + params.row.Board_Code} style={{ height: "100%", width: "100%", textDecoration: "none" }} onClick={() => {
                           console.log("hi", params.row.Board_Code);
-                        }}>{params.value}</a>
+                        }}>{params.value}</Link>
                       </div>
                     )
                   },

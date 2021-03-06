@@ -101,7 +101,7 @@
     height:100%;
     margin: 0px;
 }
-.boardList_Top_Right {
+.boardList_Top_Right{
     display: inline-block;
     position: relative;
     width:15%;
@@ -162,7 +162,7 @@
     color: white;
     border-color: white;
 }
-.lightmode *{
+.lightmode * a:not(.boardList_Top_Right){
     color: black;
     border-color: black;
 }

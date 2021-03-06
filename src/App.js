@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import DashBoard from './component/DashBoard';
 import BoardList from './component/BoardList';
 import BoardRead from './component/BoardRead';
+import BoardWrite from './component/BoardWrite';
 import '../src/component/css/ComponentCss.css';
 import Header from '../src/component/Header';
 import NavBar from '../src/component/NavBar';
@@ -62,8 +63,9 @@ class App extends Component {
             </div>
             <Switch>
               <Route exact path="/" component={DashBoard} />
-              <Route exact path="/:Board_Theme" component={BoardList} />
+              <Route exact path="/Theme/:Board_Theme" component={BoardList} />
               <Route exact path="/Read/:Board_Code" component={BoardRead} />
+              <Route exact path="/Write" component={BoardWrite} />
             </Switch>
           </div>
         </div>

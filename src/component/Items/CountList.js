@@ -1,5 +1,6 @@
 import { DataGrid } from '@material-ui/data-grid';
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import firestore from '../store/fireStore';
 
 class CountList extends Component {
@@ -40,9 +41,7 @@ class CountList extends Component {
                     field: 'Board_Title', headerName: "글 제목", flex: 0.5, sortable:false,
                     renderCell: (params) => (
                       <div style={{height:"100%", width:"100%", textAlign:"left"}}>
-                      <a href={"/Read/"+params.row.Board_Code} style={{height:"100%", width:"100%", textDecoration:"none"}} onClick={()=>{
-                        console.log("hi", params);
-                      }}>{params.value}</a>
+                      <Link to={"/Read/"+params.row.Board_Code} style={{height:"100%", width:"100%", textDecoration:"none"}} onClick={()=>{}}>{params.value}</Link>
                       </div>
                     )
                   },

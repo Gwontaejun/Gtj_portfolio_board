@@ -57,7 +57,7 @@ class Section extends Component {
                     </div>
                     {/* 이미지 버튼(게시판 목록 버튼) */}
                     <div className={"section_Button"}>
-                        <Link to="/FTB">
+                        <Link to="/Theme/FTB">
                             <ComplexButton
                                 fit={"cover"}
                                 url={Freedom}
@@ -66,7 +66,7 @@ class Section extends Component {
                                 height={"50%"}
                             />
                         </Link>
-                        <Link to="/HTB">
+                        <Link to="/Theme/HTB">
                             <ComplexButton
                                 fit={"cover"}
                                 url={Humor}
@@ -75,7 +75,7 @@ class Section extends Component {
                                 height={"50%"}
                             />
                         </Link>
-                        <Link to="/QTB">
+                        <Link to="/Theme/QTB">
                             <ComplexButton
                                 fit={"contain"}
                                 url={Question}
@@ -84,7 +84,7 @@ class Section extends Component {
                                 height={"50%"}
                             />
                         </Link>
-                        <Link to="/BTB">
+                        <Link to="/Theme/BTB">
                             <ComplexButton
                                 url={Freedom}
                                 title={"자랑게시판"}
