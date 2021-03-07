@@ -19,10 +19,10 @@ class NavBar extends Component {
                     </div>
                     <div className={"nav_Item_Bottom"}>
                         <div className={"nav_Item_Bottom_First"}>
-                            <CountList TypeText={"좋아요 순"} headerName={"좋아요 수"} orderType={"Good_Count"}/>
+                            <CountList TypeText={"조회수 순"} headerName={"조회 수"} orderType={"Read_Count"}/>
                         </div>
                         <div className={"nav_Item_Bottom_Second"}>
-                            <CountList TypeText={"조회수 순"} headerName={"조회 수"} orderType={"Read_Count"}/>
+                            <CountList TypeText={"최근 올라온 글"} headerName={"조회 수"} orderType={"Read_Count"} hiddenType={"Board_WriteDate"}/>
                         </div>
                     </div>
                 </div>

@@ -5,12 +5,13 @@ import './css/itemCss.css';
 import { Button } from '@material-ui/core';
 import AddCircleOutlineOutlined from '@material-ui/icons/AddCircleOutlineOutlined';
 import { Link } from 'react-router-dom';
+import store from './store/store';
 
 class BoardList extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { board_Data: [], board_Title: "", board_Desc: "" }
+    this.state = { mode:true, board_Data: [], board_Title: "", board_Desc: "" }
 
     this.firebaseSetting = this.firebaseSetting.bind(this);
   }
@@ -20,6 +21,9 @@ class BoardList extends Component {
       렌더를 하기전에 this.firebaseSetting을 호출함.*/
   componentWillMount() {
     this.firebaseSetting();
+    store.subscribe(function() {
+      this.setState({mode : store.getState().mode});
+    }.bind(this));
   }
 
   /*React Life Cycle의 한부분으로
@@ -62,6 +66,7 @@ class BoardList extends Component {
   }
 
   render() {
+
     return (
       <div className={"boardMain"}>
         <div className={"boardMainWraper"}>
@@ -73,10 +78,9 @@ class BoardList extends Component {
               </div>
               <div className={"boardList_Top_Right"}>
                 <Link to="/Write">
-                  <Button startIcon={<AddCircleOutlineOutlined />} color={"primary"} variant={"contained"}
-                    style={{ marginBottom: "0px", width: "100%", position: "absolute", bottom: 13 }}>
+                  <button className={"material_Button"} style={{ marginBottom: "0px", position: "absolute", bottom: 13, width:"100%" }}>
                     <h2>글쓰기</h2>
-                  </Button>
+                  </button>
                 </Link>
               </div>
             </div>
@@ -96,11 +100,16 @@ class BoardList extends Component {
                     )
                   },
                   { field: 'Read_Count', headerName: "조회수", flex: 0.2, headerAlign: "center", align: "center" },
-                  { field: 'Good_Count', headerName: "좋아요 수", flex: 0.2, headerAlign: "center", align: "center" }
                 ]}
                 rows={this.state.board_Data}
                 disableColumnMenu
                 hideFooter
+                sortModel={[
+                  {
+                    field: 'Board_No',
+                    sort: 'desc',
+                  }
+                ]}
               />
             </div>
           </div>
