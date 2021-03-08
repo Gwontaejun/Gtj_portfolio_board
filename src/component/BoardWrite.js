@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import firestore from './store/fireStore';
 import './css/itemCss.css';
-import { Button, Checkbox, Chip, FormControl, FormControlLabel, InputLabel, Select, Snackbar, TextField } from '@material-ui/core';
-import { AddPhotoAlternateOutlined } from '@material-ui/icons';
+import { Checkbox, Chip, FormControl, FormControlLabel, Select, Snackbar, TextField } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 
 class BoardWrite extends Component {
@@ -52,23 +51,27 @@ class BoardWrite extends Component {
 
         uploadTask.on(firestore.firestore.storage.TaskEvent.STATE_CHANGED,
             function (snapshot) {
-                var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                console.log('Upload is ' + progress + '% done');
-            }
-        );
+                switch (snapshot.state) {
+                    case firestore.firestore.storage.TaskState.PAUSED:
+                        break;
+                    case firestore.firestore.storage.TaskState.RUNNING:
+                        break;
+                }
+            });
     }
+
 
     firebaseWriteData() {
         let Image_Name;
         const Board_Code = this.state.Board_Theme + "_" + (parseInt(this.state.Count[this.state.Board_Theme + "_Count"]) + 1);
         const Board_No = this.state.Count.All_Count + 1;
         const User_Id = firestore.firestore.auth().currentUser.uid;
-        let User_Title;
+        let User_Name;
         const Board_Theme = this.state.Board_Theme;
 
         if (this.state.userNameInvisible === false) {
-            User_Title = firestore.firestore.auth().currentUser.displayName;
-        } else User_Title = "비공개";
+            User_Name = firestore.firestore.auth().currentUser.displayName;
+        } else User_Name = "비공개";
 
         if (this.state.imageFile.name === undefined) {
             Image_Name = "";
@@ -82,7 +85,7 @@ class BoardWrite extends Component {
             Board_Content: this.state.Board_Content,
             Board_WriteDate: new Date(),
             User_Id: User_Id,
-            User_Title: User_Title,
+            User_Name: User_Name,
             Read_Count: 0,
             Good_Count: 0,
             Image_Name: Image_Name,
@@ -91,7 +94,6 @@ class BoardWrite extends Component {
                 this.setState({ openText: "글작성을 성공했습니다!", severity: "success", openState: true });
 
                 if (this.state.imageFile.length !== 0) {
-                    console.log("FileUpload");
                     this.fileUpload(Image_Name);
                 }
 
@@ -103,7 +105,6 @@ class BoardWrite extends Component {
                 this.props.history.push('/Theme/' + Board_Theme);
             })
             .catch((error) => {
-                console.error("Error adding document: ", error);
             });
     }
 
@@ -156,7 +157,7 @@ class BoardWrite extends Component {
 
         let imageNameDisplay = "none";
         let imageName = undefined;
-        
+
         if (this.state.imageFile === "" || this.state.imageFile === undefined) {
             imageNameDisplay = "none";
         } else {
@@ -170,8 +171,8 @@ class BoardWrite extends Component {
                     <div className={"boardList"}>
                         <div className={"boardList_Top"}>
                             <div className={"boardList_Top_Left"}>
-                                <div style={{ display: "block", height:"100%" }}>
-                                    <div style={{display:"flex", height:"50%"}}>
+                                <div style={{ display: "block", height: "100%" }}>
+                                    <div style={{ display: "flex", height: "50%" }}>
                                         <FormControl style={{ width: "30%" }} variant="outlined">
                                             <Select
                                                 placeholder={"게시판 종류"}
@@ -199,7 +200,7 @@ class BoardWrite extends Component {
                                             label="이름 비공개"
                                         />
                                     </div>
-                                    <div style={{ display: "block", height:"43%", width:"100%" }}>
+                                    <div style={{ display: "block", height: "43%", width: "100%" }}>
                                         <input variant="outlined" label="글 제목" name="Board_Title" onChange={this.handleChange}
                                             className={"title_Input"} ref={(ref) => { this.Board_Title = ref; }} placeholder={"글제목"}
                                         />
@@ -222,7 +223,7 @@ class BoardWrite extends Component {
                                 <Chip style={{ position: "absolute", bottom: "100%", right: "0%", display: imageNameDisplay }} variant="outlined" color="secondary" label={imageName} onDelete={this.handleDelete} />
                                 <button className={"material_Button"} color={"primary"} variant={"contained"} onClick={() => this.refs.inputFile.click()}
                                     onChange={this.handleImageChange} component="label" name="imageFile">
-                                    <input hidden type="file" accept="image/*" ref="inputFile"/>
+                                    <input hidden type="file" accept="image/*" ref="inputFile" />
                                     <h4>이미지 첨부</h4>
                                 </button>
                             </div>

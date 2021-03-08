@@ -31,8 +31,7 @@ class BoardList extends Component {
     이전의 props값과 현재의 props값을 비교하여
     다르다면 this.firebaseSetting을 호출함.*/
   componentDidUpdate(prevProps, prevState) {
-    if (this.props.match.params.Board_Theme !== prevProps.match.params.Board_Theme) {
-
+    if (this.props.match.params.Search_Text !== prevProps.match.params.Search_Text) {
       this.firebaseSetting();
     }
   }
@@ -41,10 +40,9 @@ class BoardList extends Component {
     this.state.board_Data에 넣어주고있음. */
   firebaseSetting() {
     var board_Data_Array = [];
-    const board_Theme = this.props.match.params.Board_Theme;
 
     firestore.firestore.firestore().collection("Board")
-      .where("Board_Theme", "==", this.props.match.params.Board_Theme).get().then((querySnapshot) => {
+      .where(this.props.match.params.Search_Type,"==", this.props.match.params.Search_Text).get().then((querySnapshot) => {
         //oracle의 문법으로 select * from Board where Board_Theme = this...; 과 같음.
         querySnapshot.forEach((doc) => {
           board_Data_Array = board_Data_Array.concat(doc.data());
@@ -52,20 +50,10 @@ class BoardList extends Component {
         });
         this.setState({ board_Data: board_Data_Array });
       });
-
-    switch (board_Theme) {
-      case "FTB": this.setState({ board_Title: "자유게시판", board_Desc: "시간날때마다 보는?" });
-        break;
-      case "HTB": this.setState({ board_Title: "유머게시판", board_Desc: "재밌는걸 보고싶을땐?" });
-        break;
-      case "QTB": this.setState({ board_Title: "질문게시판", board_Desc: "모르는게 있을땐?" });
-        break;
-      case "BTB": this.setState({ board_Title: "자랑게시판", board_Desc: "나 이런사람이야~~" });
-        break;
-    }
   }
 
   render() {
+    console.log(this.state.board_Data);
 
     return (
       <div className={"boardMain"}>
@@ -73,8 +61,8 @@ class BoardList extends Component {
           <div className={"boardList"}>
             <div className={"boardList_Top"}>
               <div className={"boardList_Top_Left"}>
-                <h4 style={{ marginBottom: "0px", height: "85%", position: "absolute", bottom: 0 }}>{this.state.board_Desc}</h4>
-                <h2 style={{ fontSize: "300%", marginBottom: "0px", height: "70%", position: "absolute", bottom: 0 }}>{this.state.board_Title}</h2>
+                <h4 style={{ marginBottom: "0px", height: "85%", position: "absolute", bottom: 0 }}>찾는글이 있을땐?</h4>
+                <h2 style={{ fontSize: "300%", marginBottom: "0px", height: "70%", position: "absolute", bottom: 0 }}>검색결과</h2>
               </div>
               <div className={"boardList_Top_Right"}>
                 <Link to="/Write">

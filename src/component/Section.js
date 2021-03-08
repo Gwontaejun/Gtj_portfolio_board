@@ -9,6 +9,7 @@ import Humor from './image/Humor.jpg'
 import Question from './image/Question.jpg'
 import { Link } from 'react-router-dom';
 import store from '../component/store/store';
+import WeatherSlider from './Items/WeatherSlider';
 
 
 class Section extends Component {
@@ -17,11 +18,6 @@ class Section extends Component {
         
         this.state = {
             mode: true,
-            weatherSliderData: [
-                { link: "/", text: "주요 뉴스1" },
-                { link: "/", text: "주요 뉴스2" },
-                { link: "/", text: "주요 뉴스3" }
-            ],
             newsSliderData: [
                 { link: "/", text: "주요 뉴스1" },
                 { link: "/", text: "주요 뉴스2" },
@@ -37,7 +33,6 @@ class Section extends Component {
     }
 
     render() {
-        console.log("section render");
         let mode = this.state.mode;
         let fontColor = "";
         if (mode === true) {
@@ -51,9 +46,9 @@ class Section extends Component {
                 <div className={"section_Item_Wraper"}>
                     <div className={"section_Top"}>
                         <h3 className={"news"} >주요뉴스 > </h3>
-                        <SimpleSlider sliderData={this.state.weatherSliderData} />
-                        <h3 className={"weather"} >날씨 > </h3>
                         <SimpleSlider sliderData={this.state.newsSliderData} />
+                        <h3 className={"weather"} >날씨 > </h3>
+                        <WeatherSlider/>
                     </div>
                     {/* 이미지 버튼(게시판 목록 버튼) */}
                     <div className={"section_Button"}>

@@ -7,6 +7,7 @@ import IconButton from '@material-ui/core/IconButton';
 import { Link } from 'react-router-dom';
 import store from '../component/store/store';
 import LoginoutButton from './Items/LoginoutButton';
+import SearchBar from './Items/SearchBar';
 
 class Header extends Component {
   constructor(props) {
@@ -37,9 +38,12 @@ class Header extends Component {
                   </Link>
                 </Typography>
               </div>
+              <div className={"header_Center"}>
+                <SearchBar/>
+              </div>
               <div className={"header_Right"}>
                 <LoginoutButton ButtonType={this.props.ButtonType} ButtonColor={this.props.ButtonColor} /> {/*로그인 및 로그아웃 버튼*/}
-                <div style={{display:"flex", alignItems:"center", width:"7.5%",}}>
+                <div style={{display:"flex", alignItems:"center", width:"23%"}}>
                   <Button variant={this.props.ButtonType} color={this.props.ButtonColor} onClick={function () {
                     store.dispatch({ type: 'ModeConverter' });
                   }}

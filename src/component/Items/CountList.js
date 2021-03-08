@@ -17,7 +17,6 @@ class CountList extends Component {
     }else {
       orderType = this.props.orderType;
     }
-    console.log("orderType", orderType);
 
     firestore.firestore.firestore().collection("Board")
         .orderBy(orderType, "desc").limit(4).get().then((querySnapshot) => {

@@ -22,6 +22,7 @@ class BoardRead extends Component {
             userNameInvisible: false,
             board_Content: "",
             imageFile: "",
+            imageUrl: "",
             Count: [],
             openText: "",
             openState: false,
@@ -46,7 +47,6 @@ class BoardRead extends Component {
         firestore.firestore.firestore().collection("Board").doc(this.props.match.params.Board_Code).update({
             Read_Count: firestore.firestore.firestore.FieldValue.increment(1),
         });
-        console.log("Read");
 
         this.firebaseSetting();
     }
@@ -69,8 +69,6 @@ class BoardRead extends Component {
 
         uploadTask.on(firestore.firestore.storage.TaskEvent.STATE_CHANGED,
             function (snapshot) {
-                var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                console.log('Upload is ' + progress + '% done');
             }
         );
     }
@@ -80,18 +78,17 @@ class BoardRead extends Component {
         const Board_Code = this.state.board_Data.Board_Code;
         const Board_No = this.state.board_Data.Board_No;
         const User_Id = firestore.firestore.auth().currentUser.uid;
-        let User_Title;
+        let User_Name;
         const Board_Theme = this.state.board_Theme;
-        
-        if (this.state.userNameInvisible === false) {  
-            User_Title = firestore.firestore.auth().currentUser.displayName;
-        } else User_Title = "비공개";
+
+        if (this.state.userNameInvisible === false) {
+            User_Name = firestore.firestore.auth().currentUser.displayName;
+        } else User_Name = "비공개";
 
         if (this.state.imageFile.name === undefined) {
             Image_Name = "";
         } else Image_Name = Board_Code + "-" + this.state.imageFile.name;
 
-        console.log("Board_Code", Board_Code);
         firestore.firestore.firestore().collection("Board").doc(Board_Code).set({
             Board_No: Board_No,
             Board_Code: Board_Code,
@@ -100,7 +97,7 @@ class BoardRead extends Component {
             Board_Content: this.state.board_Content,
             Board_WriteDate: new Date(this.state.board_WriteDate_update * 1000),
             User_Id: User_Id,
-            User_Title: User_Title,
+            User_Name: User_Name,
             Read_Count: this.state.board_Data.Read_Count,
             Good_Count: this.state.board_Data.Good_Count,
             Image_Name: Image_Name,
@@ -109,20 +106,17 @@ class BoardRead extends Component {
                 this.setState({ openText: "글작성을 성공했습니다!", severity: "success", openState: true });
 
                 if (this.state.imageFile.length !== 0) {
-                    console.log("FileUpload");
                     this.fileUpload(Image_Name);
                 }
 
                 this.props.history.push('/Theme/' + Board_Theme);
             })
             .catch((error) => {
-                console.error("Error adding document: ", error);
             });
     }
 
     boardUpdateEvent() {
         if (this.state.board_Title.length !== 0) {
-            console.log(this.state.board_Theme.length);
             if (this.state.board_Theme.length !== 0) {
                 this.firebaseUpdateData();
             } else {
@@ -134,11 +128,17 @@ class BoardRead extends Component {
         }
     }
     boardDeleteEvent() {
+        if (this.state.board_Data.Image_Name !== "") {
+            const storageRef = firestore.firestore.storage().ref();
+            const imageRef = storageRef.child('images/' + this.state.board_Data.Image_Name);
+
+            imageRef.delete().then(function () {
+            });
+        }
+
         firestore.firestore.firestore().collection("Board").doc(this.props.match.params.Board_Code).delete().then(() => {
-            console.log("Document successfully deleted!", this.props.match.params.Board_Code);
             this.props.history.push('/Theme/' + this.state.board_Theme);
         }).catch((error) => {
-            console.error("Error removing document: ", error);
         });
     }
 
@@ -168,49 +168,66 @@ class BoardRead extends Component {
         let fullDate;
         let board_Theme;
 
-        firestore.firestore.firestore().collection("Board")
-            .where("Board_Code", "==", this.props.match.params.Board_Code).get().then((querySnapshot) => {
-                querySnapshot.forEach((doc) => {
-                    secondsToDate = new Date(doc.data().Board_WriteDate.seconds * 1000);
-                    fullDate = secondsToDate.getFullYear() + "년" + (secondsToDate.getMonth() + 1) + "월" + secondsToDate.getDate() + "일";
-                    board_Theme = doc.data().Board_Theme;
+        firestore.firestore.firestore().collection("Board").doc(this.props.match.params.Board_Code).get().then((doc) => {
+            if (doc.exists) {
+                let imageurl = [];
+                if (doc.data().Image_Name !== "") {
+                    const storageRef = firestore.firestore.storage().ref();
+                    const imageRef = storageRef.child('images/' + doc.data().Image_Name);
 
-                    switch (board_Theme) {
-                        case "FTB": this.setState({ board_Theme_Name: "자유게시판" });
-                            break;
-                        case "HTB": this.setState({ board_Theme_Name: "유머게시판" });
-                            break;
-                        case "QTB": this.setState({ board_Theme_Name: "질문게시판" });
-                            break;
-                        case "BTB": this.setState({ board_Theme_Name: "자랑게시판" });
-                            break;
-                    }
-                    this.setState({
-                        board_Data: doc.data(),
-                        board_WriteDate: fullDate,
-                        board_Theme: doc.data().Board_Theme,
-                        board_Title: doc.data().Board_Title,
-                        board_Content: doc.data().Board_Content,
-                        board_WriteDate_update: doc.data().Board_WriteDate.seconds 
+                    imageRef.getDownloadURL().then(function (url) {
+                        imageurl.push(url);
                     });
-                });
-            });
+                    this.setState({ imageUrl: imageurl });
+                }
 
+                secondsToDate = new Date(doc.data().Board_WriteDate.seconds * 1000);
+                fullDate = secondsToDate.getFullYear() + "년" + (secondsToDate.getMonth() + 1) + "월" + secondsToDate.getDate() + "일";
+                board_Theme = doc.data().Board_Theme;
+
+                switch (board_Theme) {
+                    case "FTB": this.setState({ board_Theme_Name: "자유게시판" });
+                        break;
+                    case "HTB": this.setState({ board_Theme_Name: "유머게시판" });
+                        break;
+                    case "QTB": this.setState({ board_Theme_Name: "질문게시판" });
+                        break;
+                    case "BTB": this.setState({ board_Theme_Name: "자랑게시판" });
+                        break;
+                }
+
+                this.setState({
+                    board_Data: doc.data(),
+                    board_WriteDate: fullDate,
+                    board_Theme: doc.data().Board_Theme,
+                    board_Title: doc.data().Board_Title,
+                    board_Content: doc.data().Board_Content,
+                    board_WriteDate_update: doc.data().Board_WriteDate.seconds,
+                });
+            }
+        });
     }
 
     render() {
+        setTimeout(() => {
+            if (this.state.imageUrl.length !== 0 && this.state.mode !== "update") {
+                document.getElementById("imageTag").src = this.state.imageUrl;
+                document.getElementById("imageTag").style.display = "block";
+                document.getElementById("board_Content").style.height = "70%";
+            }
+        }, 200);
+
         let updateButton;
 
         if (firestore.firestore.auth().currentUser !== null) {
             if (this.state.board_Data.User_Id === firestore.firestore.auth().currentUser.uid) {
-                console.log("유저가 같습니다.", firestore.firestore.auth().currentUser);
                 updateButton =
-                <button className={"material_Button"} startIcon={""} color={"primary"} variant={"contained"} onClick={()=>this.setState({mode:"update"})}
-                    style={{ marginBottom: "0px", width: "100%", position: "absolute", bottom: 13 }}>
-                    <h2>수정</h2>
-                </button>;
-            } else console.log("다른 유저라서 수정이 불가능.");
-        } else console.log("로그인이 안되어있음.");
+                    <button className={"material_Button"} startIcon={""} color={"primary"} variant={"contained"} onClick={() => this.setState({ mode: "update" })}
+                        style={{ marginBottom: "0px", width: "100%", position: "absolute", bottom: 13 }}>
+                        <h2>수정</h2>
+                    </button>;
+            }
+        }
 
         const handleClose = (event, reason) => {
             if (reason === 'clickaway') {
@@ -231,7 +248,6 @@ class BoardRead extends Component {
         }
 
         let content;
-        console.log(this.state.mode);
         if (this.state.mode === "Read") {
             content =
                 <div className={"boardList"}>
@@ -240,7 +256,7 @@ class BoardRead extends Component {
                             <h3 style={{ height: "80%", position: "absolute", bottom: 0 }}><Link to={"/Theme/" + this.state.board_Data.Board_Theme}>{this.state.board_Theme_Name}</Link></h3>
                             <h2 style={{ fontSize: "200%", marginBottom: "-0.5%", height: "85%", position: "absolute", bottom: 0 }}>{this.state.board_Data.Board_Title}</h2>
                             <div style={{ width: "100%", height: "35%", position: "absolute", bottom: 0 }}>
-                                <h4 style={{ display: "inline-block", margin: "0px", marginRight: "1%" }}>작성자 : {this.state.board_Data.User_Title}</h4>/
+                                <h4 style={{ display: "inline-block", margin: "0px", marginRight: "1%" }}>작성자 : {this.state.board_Data.User_Name}</h4>/
                             <h4 style={{ display: "inline-block", margin: "0px", marginLeft: "1%" }}>작성일 : {this.state.board_WriteDate}</h4>
                             </div>
                         </div>
@@ -249,8 +265,9 @@ class BoardRead extends Component {
                         </div>
                     </div>
                     <div className={"boardList_Bottom"}>
+                        <img style={{ display: "none", width: "40%", height: "30%" }} src={this.state.imageUrl} id="imageTag" />
                         <textarea
-                            readOnly name="board_Content"
+                            readOnly name="board_Content" id="board_Content"
                             className={"content_Textarea"}
                             value={this.state.board_Data.Board_Content}
                         />
@@ -258,78 +275,78 @@ class BoardRead extends Component {
                 </div>;
         } else if (this.state.mode === "update") {
             content =
-            <div className={"boardList"}>
-                <div className={"boardList_Top"}>
-                    <div className={"boardList_Top_Left"}>
-                        <div style={{ display: "block", height: "100%" }}>
-                            <div style={{ display: "flex", height: "50%" }}>
-                                <FormControl style={{ width: "30%" }} variant="outlined">
-                                    <Select
-                                        placeholder={"게시판 종류"}
-                                        className={"theme_Select"}
-                                        native
-                                        onChange={this.handleChange}
-                                        value={this.state.board_Theme}
-                                        name="board_Theme"
-                                    >
-                                        <option value={""}>게시판 종류</option>
-                                        <option style={{ color: "black" }} value={"FTB"}>자유게시판</option>
-                                        <option style={{ color: "black" }} value={"HTB"}>유머게시판</option>
-                                        <option style={{ color: "black" }} value={"QTB"}>질문게시판</option>
-                                        <option style={{ color: "black" }} value={"BTB"}>자랑게시판</option>
-                                    </Select>
-                                </FormControl>
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox
-                                            name="userNameInvisible"
-                                            color="secondary"
-                                            onChange={this.handleUserNameInvisible}
-                                        />
-                                    }
-                                    label="이름 비공개"
-                                />
+                <div className={"boardList"}>
+                    <div className={"boardList_Top"}>
+                        <div className={"boardList_Top_Left"}>
+                            <div style={{ display: "block", height: "100%" }}>
+                                <div style={{ display: "flex", height: "50%" }}>
+                                    <FormControl style={{ width: "30%" }} variant="outlined">
+                                        <Select
+                                            placeholder={"게시판 종류"}
+                                            className={"theme_Select"}
+                                            native
+                                            onChange={this.handleChange}
+                                            value={this.state.board_Theme}
+                                            name="board_Theme"
+                                        >
+                                            <option value={""}>게시판 종류</option>
+                                            <option style={{ color: "black" }} value={"FTB"}>자유게시판</option>
+                                            <option style={{ color: "black" }} value={"HTB"}>유머게시판</option>
+                                            <option style={{ color: "black" }} value={"QTB"}>질문게시판</option>
+                                            <option style={{ color: "black" }} value={"BTB"}>자랑게시판</option>
+                                        </Select>
+                                    </FormControl>
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                name="userNameInvisible"
+                                                color="secondary"
+                                                onChange={this.handleUserNameInvisible}
+                                            />
+                                        }
+                                        label="이름 비공개"
+                                    />
+                                </div>
+                                <div style={{ display: "block", height: "43%", width: "100%" }}>
+                                    <input variant="outlined" label="글 제목" name="board_Title" onChange={this.handleChange} value={this.state.board_Title}
+                                        className={"title_Input"} ref={(ref) => { this.Board_Title = ref; }} placeholder={"글제목"}
+                                    />
+                                </div>
                             </div>
-                            <div style={{ display: "block", height: "43%", width: "100%" }}>
-                                <input variant="outlined" label="글 제목" name="board_Title" onChange={this.handleChange} value={this.state.board_Title}
-                                    className={"title_Input"} ref={(ref) => { this.Board_Title = ref; }} placeholder={"글제목"}
-                                />
+                        </div>
+                        <div className={"boardList_Top_Right"}>
+                            <div style={{ display: "flex", height: "70%", marginTop: "13%" }}>
+                                <button className={"material_Button"} onClick={this.boardUpdateEvent}
+                                    style={{ marginBottom: "0px", width: "50%" }}>
+                                    <h2>수정</h2>
+                                </button>
+                                <button className={"delete_Button"} onClick={this.boardDeleteEvent}
+                                    style={{ marginBottom: "0px", width: "50%" }}>
+                                    <h2>삭제</h2>
+                                </button>
                             </div>
                         </div>
                     </div>
-                    <div className={"boardList_Top_Right"}>
-                        <div style={{display:"flex", height:"70%", marginTop:"13%"}}>
-                            <button className={"material_Button"} onClick={this.boardUpdateEvent}
-                                style={{ marginBottom: "0px", width: "50%" }}>
-                                <h2>수정</h2>
-                            </button>
-                            <button className={"delete_Button"} onClick={this.boardDeleteEvent}
-                                style={{ marginBottom: "0px", width: "50%"}}>
-                                <h2>삭제</h2>
+                    <div className={"boardList_Bottom"}>
+                        <textarea
+                            name="board_Content" className={"content_Textarea"}
+                            value={this.state.board_Content} onChange={this.handleChange}
+                        />
+                        <div style={{ position: "absolute", bottom: "5%", right: "10%" }}>
+                            <Chip style={{ position: "absolute", bottom: "100%", right: "0%", display: imageNameDisplay }} variant="outlined" color="secondary" label={imageName} onDelete={this.handleDelete} />
+                            <button className={"material_Button"} color={"primary"} variant={"contained"} onClick={() => this.refs.inputFile.click()}
+                                onChange={this.handleImageChange} component="label" name="imageFile">
+                                <input hidden type="file" accept="image/*" ref="inputFile" />
+                                <h4>이미지 첨부</h4>
                             </button>
                         </div>
+                        <Snackbar style={{ width: "100%" }} open={this.state.openState} autoHideDuration={2000} onClose={handleClose}>
+                            <Alert variant="filled" onClose={handleClose} severity={this.state.severity}>
+                                {this.state.openText}
+                            </Alert>
+                        </Snackbar>
                     </div>
                 </div>
-                <div className={"boardList_Bottom"}>
-                    <textarea
-                        name="board_Content" className={"content_Textarea"}
-                        value={this.state.board_Content} onChange={this.handleChange}
-                    />
-                    <div style={{ position: "absolute", bottom: "5%", right: "10%" }}>
-                        <Chip style={{ position: "absolute", bottom: "100%", right: "0%", display: imageNameDisplay }} variant="outlined" color="secondary" label={imageName} onDelete={this.handleDelete} />
-                        <button className={"material_Button"} color={"primary"} variant={"contained"} onClick={() => this.refs.inputFile.click()}
-                            onChange={this.handleImageChange} component="label" name="imageFile">
-                            <input hidden type="file" accept="image/*" ref="inputFile" />
-                            <h4>이미지 첨부</h4>
-                        </button>
-                    </div>
-                    <Snackbar style={{ width: "100%" }} open={this.state.openState} autoHideDuration={2000} onClose={handleClose}>
-                        <Alert variant="filled" onClose={handleClose} severity={this.state.severity}>
-                            {this.state.openText}
-                        </Alert>
-                    </Snackbar>
-                </div>
-            </div>
         }
 
 

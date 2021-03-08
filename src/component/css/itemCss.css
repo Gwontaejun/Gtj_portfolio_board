@@ -1,10 +1,3 @@
-/*hover Slider (마우스 커서를 위에 올릴때 슬라이드 되는 효과)*/
-.container {
-    position: relative;
-    width: 100%;
-    height: 25%;
-}
-
 /*메인화면 왼쪽 게시판 목록 CSS*/
 .image {
     display: block;
@@ -12,6 +5,12 @@
     height: 100%;
 }
 
+/*Hover Slider CSS*/
+.container {
+    position: relative;
+    width: 100%;
+    height: 25%;
+}
 .overlay {
     position: absolute;
     bottom: 0;
@@ -22,12 +21,10 @@
     height: 100%;
     transition: .5s ease;
 }
-
 .container:hover .overlay {
     width: 100%;
     left: 0;
 }
-
 .firstText {
     color: black;
     font-size: 20px;
@@ -66,6 +63,7 @@
     margin-right: 1%;
 }
 
+/*로그인 했을때 안했을때 비교하기 위함.*/
 .Logined { 
     display:none;
 }
@@ -73,6 +71,7 @@
     display:block;
 }
 
+/*각종 태그들*/
 .title_Input {
     border: 1px solid;
     font-size: 150%;
@@ -91,7 +90,13 @@
     height: 90%;
     margin-right: 8%;
 }
+.searchBar_TextField{
+    width:50%;
+    height:100%;
+    background-color: white;
+}
 
+/*버튼들 hover CSS*/
 .delete_Button:hover{
     cursor:pointer;
     opacity: 1;

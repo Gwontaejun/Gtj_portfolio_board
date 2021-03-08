@@ -28,7 +28,6 @@ class LoginoutButton extends Component {
                         window.localStorage.setItem("LoginData", JSON.stringify(user));
                         this.setState({ LoginData: window.localStorage.getItem("LoginData") });
                     }).catch((error) => {
-                        console.log("error", error);
                     });
             } else if (currentUser !== null) {
             }
@@ -49,17 +48,14 @@ class LoginoutButton extends Component {
         /*로그인상태인지 확인함.*/
         if (this.state.LoginData === null) {
             ButtonText = "Login";
-            NameType = "none";
+            NameText = "로그인을 하셔야합니다.";
         } else if (this.state.LoginData !== null) {
             ButtonText = "Logout";
             NameText = JSON.parse(window.localStorage.getItem("LoginData")).displayName + "님 어서오세요!";
-            NameType = "inline-block";
-
-            console.log(NameText);
         }
 
         return (
-            <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", marginRight: "2%", width: "40%" }}>
+            <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", marginRight: "2%", width: "80%" }}>
                 <div style={{ display: NameType, marginRight: "5%" }}><h2>{NameText}</h2></div>
                 <Button color={this.props.ButtonColor} variant={this.props.ButtonType} onClick={this.Loginout}>{ButtonText}</Button>
             </div>
