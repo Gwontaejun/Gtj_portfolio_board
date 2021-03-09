@@ -1,18 +1,17 @@
 import React, { Component } from 'react';
 import firestore from './store/fireStore';
 import './css/itemCss.css';
-import { Checkbox, Chip, FormControl, FormControlLabel, Select, Snackbar, TextField } from '@material-ui/core';
-import { Alert } from '@material-ui/lab';
+import { Checkbox, Chip, FormControl, FormControlLabel, Select } from '@material-ui/core';
 
 class BoardWrite extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            Board_Title: "",
-            Board_Theme: "",
+            board_Title: "",
+            board_Theme: "",
             userNameInvisible: false,
-            Board_Content: "",
+            board_Content: "",
             imageFile: "",
             Count: [],
             openText: "",
@@ -20,7 +19,7 @@ class BoardWrite extends Component {
             severity: "success",
         }
 
-        this.Board_Title = null;
+        this.board_Title = null;
 
         this.firebaseWriteData = this.firebaseWriteData.bind(this);
         this.boardWriteEvent = this.boardWriteEvent.bind(this);
@@ -63,11 +62,11 @@ class BoardWrite extends Component {
 
     firebaseWriteData() {
         let Image_Name;
-        const Board_Code = this.state.Board_Theme + "_" + (parseInt(this.state.Count[this.state.Board_Theme + "_Count"]) + 1);
+        const Board_Code = this.state.board_Theme + "_" + (parseInt(this.state.Count[this.state.board_Theme + "_Count"]) + 1);
         const Board_No = this.state.Count.All_Count + 1;
         const User_Id = firestore.firestore.auth().currentUser.uid;
         let User_Name;
-        const Board_Theme = this.state.Board_Theme;
+        const Board_Theme = this.state.board_Theme;
 
         if (this.state.userNameInvisible === false) {
             User_Name = firestore.firestore.auth().currentUser.displayName;
@@ -81,8 +80,8 @@ class BoardWrite extends Component {
             Board_No: Board_No,
             Board_Theme: Board_Theme,
             Board_Code: Board_Code,
-            Board_Title: this.state.Board_Title,
-            Board_Content: this.state.Board_Content,
+            Board_Title: this.state.board_Title,
+            Board_Content: this.state.board_Content,
             Board_WriteDate: new Date(),
             User_Id: User_Id,
             User_Name: User_Name,
@@ -91,8 +90,6 @@ class BoardWrite extends Component {
             Image_Name: Image_Name,
         })
             .then((docRef) => {
-                this.setState({ openText: "글작성을 성공했습니다!", severity: "success", openState: true });
-
                 if (this.state.imageFile.length !== 0) {
                     this.fileUpload(Image_Name);
                 }
@@ -104,20 +101,18 @@ class BoardWrite extends Component {
 
                 this.props.history.push('/Theme/' + Board_Theme);
             })
-            .catch((error) => {
-            });
     }
 
     boardWriteEvent() {
-        if (this.state.Board_Title.length !== 0) {
-            if (this.state.Board_Theme.length !== 0) {
+        if (this.state.board_Title.length !== 0) {
+            if (this.state.board_Theme.length !== 0) {
                 this.firebaseWriteData();
             } else {
-                this.setState({ openText: "게시판종류를 선택해주세요.", severity: "error", openState: true });
+                alert("게시판종류를 선택해주세요.");
             }
         } else {
-            this.Board_Title.focus();
-            this.setState({ openState: true, openText: "글 제목을 적어주세요.", severity: "error" });
+            alert("글 제목을 적어주세요.");
+            this.board_Title.focus();
         }
     }
 
@@ -147,14 +142,6 @@ class BoardWrite extends Component {
 
 
     render() {
-        const handleClose = (event, reason) => {
-            if (reason === 'clickaway') {
-                return;
-            }
-
-            this.setState({ openState: false });
-        };
-
         let imageNameDisplay = "none";
         let imageName = undefined;
 
@@ -180,7 +167,7 @@ class BoardWrite extends Component {
                                                 native
                                                 onChange={this.handleChange}
                                                 value={this.state.boardTheme}
-                                                name="Board_Theme"
+                                                name="board_Theme"
                                             >
                                                 <option >게시판 종류</option>
                                                 <option style={{ color: "black" }} value={"FTB"}>자유게시판</option>
@@ -201,8 +188,8 @@ class BoardWrite extends Component {
                                         />
                                     </div>
                                     <div style={{ display: "block", height: "43%", width: "100%" }}>
-                                        <input variant="outlined" label="글 제목" name="Board_Title" onChange={this.handleChange}
-                                            className={"title_Input"} ref={(ref) => { this.Board_Title = ref; }} placeholder={"글제목"}
+                                        <input variant="outlined" label="글 제목" name="board_Title" onChange={this.handleChange}
+                                            className={"title_Input"} ref={(ref) => { this.board_Title = ref; }} placeholder={"글제목"}
                                         />
                                     </div>
                                 </div>
@@ -216,7 +203,7 @@ class BoardWrite extends Component {
                         </div>
                         <div className={"boardList_Bottom"}>
                             <textarea
-                                name="Board_Content" className={"content_Textarea"}
+                                name="board_Content" className={"content_Textarea"}
                                 onChange={this.handleChange}
                             />
                             <div style={{ position: "absolute", bottom: "5%", right: "10%" }}>
@@ -227,11 +214,6 @@ class BoardWrite extends Component {
                                     <h4>이미지 첨부</h4>
                                 </button>
                             </div>
-                            <Snackbar style={{ width: "100%" }} open={this.state.openState} autoHideDuration={2000} onClose={handleClose}>
-                                <Alert variant="filled" onClose={handleClose} severity={this.state.severity}>
-                                    {this.state.openText}
-                                </Alert>
-                            </Snackbar>
                         </div>
                     </div>
                 </div>

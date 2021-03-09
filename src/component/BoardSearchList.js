@@ -11,7 +11,7 @@ class BoardList extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { mode:true, board_Data: [], board_Title: "", board_Desc: "" }
+    this.state = { mode: true, board_Data: [], board_Title: "", board_Desc: "" }
 
     this.firebaseSetting = this.firebaseSetting.bind(this);
   }
@@ -21,8 +21,8 @@ class BoardList extends Component {
       렌더를 하기전에 this.firebaseSetting을 호출함.*/
   componentWillMount() {
     this.firebaseSetting();
-    store.subscribe(function() {
-      this.setState({mode : store.getState().mode});
+    store.subscribe(function () {
+      this.setState({ mode: store.getState().mode });
     }.bind(this));
   }
 
@@ -42,7 +42,7 @@ class BoardList extends Component {
     var board_Data_Array = [];
 
     firestore.firestore.firestore().collection("Board")
-      .where(this.props.match.params.Search_Type,"==", this.props.match.params.Search_Text).get().then((querySnapshot) => {
+      .where(this.props.match.params.Search_Type, "==", this.props.match.params.Search_Text).get().then((querySnapshot) => {
         //oracle의 문법으로 select * from Board where Board_Theme = this...; 과 같음.
         querySnapshot.forEach((doc) => {
           board_Data_Array = board_Data_Array.concat(doc.data());
@@ -53,8 +53,6 @@ class BoardList extends Component {
   }
 
   render() {
-    console.log(this.state.board_Data);
-
     return (
       <div className={"boardMain"}>
         <div className={"boardMainWraper"}>
@@ -66,7 +64,7 @@ class BoardList extends Component {
               </div>
               <div className={"boardList_Top_Right"}>
                 <Link to="/Write">
-                  <button className={"material_Button"} style={{ marginBottom: "0px", position: "absolute", bottom: 13, width:"100%" }}>
+                  <button className={"material_Button"} style={{ marginBottom: "0px", position: "absolute", bottom: 13, width: "100%" }}>
                     <h2>글쓰기</h2>
                   </button>
                 </Link>

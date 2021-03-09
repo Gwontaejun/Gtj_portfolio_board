@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { DataGrid } from '@material-ui/data-grid';
 import firestore from './store/fireStore';
 import './css/itemCss.css';
-import { Button } from '@material-ui/core';
-import AddCircleOutlineOutlined from '@material-ui/icons/AddCircleOutlineOutlined';
 import { Link } from 'react-router-dom';
 import store from './store/store';
 
@@ -44,7 +42,7 @@ class BoardList extends Component {
     const board_Theme = this.props.match.params.Board_Theme;
 
     firestore.firestore.firestore().collection("Board")
-      .where("Board_Theme", "==", this.props.match.params.Board_Theme).get().then((querySnapshot) => {
+      .where("Board_Theme", "==", board_Theme).get().then((querySnapshot) => {
         //oracle의 문법으로 select * from Board where Board_Theme = this...; 과 같음.
         querySnapshot.forEach((doc) => {
           board_Data_Array = board_Data_Array.concat(doc.data());

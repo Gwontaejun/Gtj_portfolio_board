@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import firestore from './store/fireStore';
 import './css/itemCss.css';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
 import { Link } from 'react-router-dom';
-import { Button, ButtonGroup, Checkbox, Chip, FormControl, FormControlLabel, Select, Snackbar } from '@material-ui/core';
-import store from './store/store';
+import { Checkbox, Chip, FormControl, FormControlLabel, Select, Snackbar } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
+import CommentDrawer from './Items/CommentDrawer';
 
 class BoardRead extends Component {
     constructor(props) {
@@ -28,6 +26,7 @@ class BoardRead extends Component {
             openState: false,
             severity: "success",
             board_WriteDate_update: '',
+            drawerState: false,
         }
 
         this.Board_Title = null;
@@ -41,6 +40,8 @@ class BoardRead extends Component {
         this.handleImageChange = this.handleImageChange.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
         this.handleUserNameInvisible = this.handleUserNameInvisible.bind(this);
+        this.openDrawer = this.openDrawer.bind(this);
+        this.closeDrawer = this.closeDrawer.bind(this);
     }
 
     componentWillMount() {
@@ -120,11 +121,11 @@ class BoardRead extends Component {
             if (this.state.board_Theme.length !== 0) {
                 this.firebaseUpdateData();
             } else {
-                this.setState({ openText: "게시판종류를 선택해주세요.", severity: "error", openState: true });
+                alert("게시판종류를 선택해주세요.");
             }
         } else {
+            alert("글 제목을 적어주세요.");
             this.Board_Title.focus();
-            this.setState({ openState: true, openText: "글 제목을 적어주세요.", severity: "error" });
         }
     }
     boardDeleteEvent() {
@@ -137,8 +138,13 @@ class BoardRead extends Component {
         }
 
         firestore.firestore.firestore().collection("Board").doc(this.props.match.params.Board_Code).delete().then(() => {
-            this.props.history.push('/Theme/' + this.state.board_Theme);
-        }).catch((error) => {
+            firestore.firestore.firestore().collection("Comment")
+            .where("Board_Code", "==", this.props.match.params.Board_Code).get().then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    doc.ref.delete(); 
+                });
+            });
+            window.location.href = '/Theme/' + this.state.board_Theme; 
         });
     }
 
@@ -208,6 +214,13 @@ class BoardRead extends Component {
         });
     }
 
+    openDrawer() {
+        this.setState({ drawerState: true });
+    }
+    closeDrawer() {
+        this.setState({ drawerState: false });
+    }
+
     render() {
         setTimeout(() => {
             if (this.state.imageUrl.length !== 0 && this.state.mode !== "update") {
@@ -215,27 +228,20 @@ class BoardRead extends Component {
                 document.getElementById("imageTag").style.display = "block";
                 document.getElementById("board_Content").style.height = "70%";
             }
-        }, 200);
+        }, 500);
 
         let updateButton;
 
         if (firestore.firestore.auth().currentUser !== null) {
             if (this.state.board_Data.User_Id === firestore.firestore.auth().currentUser.uid) {
                 updateButton =
-                    <button className={"material_Button"} startIcon={""} color={"primary"} variant={"contained"} onClick={() => this.setState({ mode: "update" })}
+                    <button className={"material_Button"} onClick={() => this.setState({ mode: "update" })}
                         style={{ marginBottom: "0px", width: "100%", position: "absolute", bottom: 13 }}>
                         <h2>수정</h2>
                     </button>;
             }
         }
-
-        const handleClose = (event, reason) => {
-            if (reason === 'clickaway') {
-                return;
-            }
-
-            this.setState({ openState: false });
-        };
+        
 
         let imageNameDisplay = "none";
         let imageName = undefined;
@@ -252,12 +258,19 @@ class BoardRead extends Component {
             content =
                 <div className={"boardList"}>
                     <div className={"boardList_Top"}>
-                        <div className={"boardList_Top_Left"}>
-                            <h3 style={{ height: "80%", position: "absolute", bottom: 0 }}><Link to={"/Theme/" + this.state.board_Data.Board_Theme}>{this.state.board_Theme_Name}</Link></h3>
-                            <h2 style={{ fontSize: "200%", marginBottom: "-0.5%", height: "85%", position: "absolute", bottom: 0 }}>{this.state.board_Data.Board_Title}</h2>
-                            <div style={{ width: "100%", height: "35%", position: "absolute", bottom: 0 }}>
-                                <h4 style={{ display: "inline-block", margin: "0px", marginRight: "1%" }}>작성자 : {this.state.board_Data.User_Name}</h4>/
-                            <h4 style={{ display: "inline-block", margin: "0px", marginLeft: "1%" }}>작성일 : {this.state.board_WriteDate}</h4>
+                        <div className={"boardList_Top_Left"} style={{ display: "flex" }}>
+                            <div style={{ width: "80%", height: "100%" }}>
+                                <h3 style={{ height: "80%", position: "absolute", bottom: 0 }}><Link to={"/Theme/" + this.state.board_Data.Board_Theme}>{this.state.board_Theme_Name}</Link></h3>
+                                <h2 style={{ fontSize: "200%", marginBottom: "-0.5%", height: "85%", position: "absolute", bottom: 0 }}>{this.state.board_Data.Board_Title}</h2>
+                                <div style={{ width: "80%", height: "35%", position: "absolute", bottom: 0 }}>
+                                    <h4 style={{ display: "inline-block", margin: "0px", marginRight: "1%" }}>작성자 : {this.state.board_Data.User_Name}</h4>/
+                                    <h4 style={{ display: "inline-block", margin: "0px", marginLeft: "1%" }}>작성일 : {this.state.board_WriteDate}</h4>
+                                </div>
+                            </div>
+                            <div style={{ width: "17%", height: "100%", marginTop: "3.5%" }}>
+                                <button className={"material_Button"} style={{ float: "right", verticalAlign: "bottom", width: "100%" }} onClick={this.openDrawer}>
+                                    <h2>댓글</h2>
+                                </button>
                             </div>
                         </div>
                         <div className={"boardList_Top_Right"}>
@@ -321,7 +334,7 @@ class BoardRead extends Component {
                                     <h2>수정</h2>
                                 </button>
                                 <button className={"delete_Button"} onClick={this.boardDeleteEvent}
-                                    style={{ marginBottom: "0px", width: "50%" }}>
+                                    style={{ marginBottom: "0px", width: "50%", borderColor:"red" }}>
                                     <h2>삭제</h2>
                                 </button>
                             </div>
@@ -340,11 +353,6 @@ class BoardRead extends Component {
                                 <h4>이미지 첨부</h4>
                             </button>
                         </div>
-                        <Snackbar style={{ width: "100%" }} open={this.state.openState} autoHideDuration={2000} onClose={handleClose}>
-                            <Alert variant="filled" onClose={handleClose} severity={this.state.severity}>
-                                {this.state.openText}
-                            </Alert>
-                        </Snackbar>
                     </div>
                 </div>
         }
@@ -354,6 +362,11 @@ class BoardRead extends Component {
             <div className={"boardMain"}>
                 <div className={"boardMainWraper"}>
                     {content}
+                    <CommentDrawer
+                        open={this.state.drawerState}
+                        onClose={this.closeDrawer}
+                        board_Code={this.props.match.params.Board_Code}
+                    />
                 </div>
             </div>
         );

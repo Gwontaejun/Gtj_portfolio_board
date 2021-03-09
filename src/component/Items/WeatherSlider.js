@@ -35,12 +35,7 @@ export default class WeatherSlider extends Component {
                 data.name = cityKRName;
                 this.setState({
                     weatherData: this.state.weatherData.concat(data),
-                    // temp: data.main.temp,
-                    // desc: data.weather[0].description,
-                    // icon: data.weather[0].icon,
-                    // loading: false
                 });
-                console.log("temp ->", this.state.weatherData);
             })
     }
 
@@ -50,13 +45,13 @@ export default class WeatherSlider extends Component {
             infinite: true,
             slidesToShow: 1,
             slidesToScroll: 1,
-            autoplaySpeed: 3000,
+            autoplaySpeed: 10000,
             autoplay: true,
             pauseOnHover: true,
             arrows: false
         };
         return (
-            <div className={"slider_Div"}>
+            <div className={"slider_Div"} style={{width:"20%"}}>
                 <Slider {...settings}>
                     {this.state.weatherData.map((data) => {
                         return (
@@ -64,7 +59,7 @@ export default class WeatherSlider extends Component {
                                 <a style={{ textDecoration: "none", display: "flex" }}>
                                     <img style={{ width: "10%", height: "10%", margin: "auto 0" }} src={'http://openweathermap.org/img/wn/' + data.weather[0].icon + '@2x.png'} />
                                     <h3 style={{ color: this.props.color }}>
-                                        {data.main.temp}도({data.name})
+                                        {data.main.temp}°C({data.name})
                                     </h3>
                                 </a>
                             </div>

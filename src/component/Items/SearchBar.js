@@ -37,6 +37,7 @@ class SearchBar extends Component {
                     <Radio
                         checked={this.state.searchType === 'Board_Title'}
                         onChange={this.handleCheckboxChange}
+                        color={"primary"}
                         value="Board_Title"
                     />
                 } label="제목" />
@@ -44,6 +45,7 @@ class SearchBar extends Component {
                     <Radio
                         checked={this.state.searchType === 'User_Name'}
                         onChange={this.handleCheckboxChange}
+                        color={"primary"}
                         value="User_Name"
                     />
                 } label="작성자" />
