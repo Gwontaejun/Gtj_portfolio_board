@@ -14,11 +14,10 @@
     margin-bottom: 0.35%;
 }
 .header_Left {
-    width:10%;
+    width:15%;
 }
 .header_Center {
-    margin-left: 10%;
-    width:45%;
+    width:50%;
 }
 .header_Right {
     display:flex;
@@ -120,7 +119,7 @@
 .boardList_Top_Right{
     display: inline-block;
     position: relative;
-    width:15%;
+    width:16%;
     height:100%;
     margin: 0px;   
 }
@@ -187,10 +186,11 @@
 }
 .darkmode .delete_Button{
     background-color: #1e1f21;
-    color: white;
-    border-color: white;
-    border:white 1px solid;
+    border: #f50057 1px solid;
     border-radius: 3%;
+}
+.darkmode .delete_Button *{
+    color:#f50057;
 }
 .darkmode .title_Input{
     color:white;
@@ -217,7 +217,7 @@
     box-shadow: 1.5px 1.5px 2px grey
 }
 .lightmode .delete_Button{
-    background-color:#cf3247;
+    background-color:#f50057;
     color: white;
     border-radius: 3%;
     border: none;

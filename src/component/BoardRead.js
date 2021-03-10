@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { Checkbox, Chip, FormControl, FormControlLabel, Select, Snackbar } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import CommentDrawer from './Items/CommentDrawer';
+import { AddPhotoAlternateOutlined, CommentOutlined, CreateOutlined, DeleteForeverOutlined } from '@material-ui/icons';
 
 class BoardRead extends Component {
     constructor(props) {
@@ -104,13 +105,13 @@ class BoardRead extends Component {
             Image_Name: Image_Name,
         })
             .then((docRef) => {
-                this.setState({ openText: "글작성을 성공했습니다!", severity: "success", openState: true });
-
+                this.setState({ openText: "글작성을 성공했습니다!", severity: "success", openState: true, mode: "Read" });
+                this.firebaseSetting();
                 if (this.state.imageFile.length !== 0) {
                     this.fileUpload(Image_Name);
                 }
 
-                this.props.history.push('/Theme/' + Board_Theme);
+                // this.props.history.push('/Theme/' + Board_Theme);
             })
             .catch((error) => {
             });
@@ -139,12 +140,13 @@ class BoardRead extends Component {
 
         firestore.firestore.firestore().collection("Board").doc(this.props.match.params.Board_Code).delete().then(() => {
             firestore.firestore.firestore().collection("Comment")
-            .where("Board_Code", "==", this.props.match.params.Board_Code).get().then((querySnapshot) => {
-                querySnapshot.forEach((doc) => {
-                    doc.ref.delete(); 
+                .where("Board_Code", "==", this.props.match.params.Board_Code).get().then((querySnapshot) => {
+                    querySnapshot.forEach((doc) => {
+                        console.log("vdoc.ref", doc.ref);
+                        doc.ref.delete();
+                    });
                 });
-            });
-            window.location.href = '/Theme/' + this.state.board_Theme; 
+            window.location.href = '/Theme/' + this.state.board_Theme;
         });
     }
 
@@ -198,7 +200,7 @@ class BoardRead extends Component {
                         break;
                     case "QTB": this.setState({ board_Theme_Name: "질문게시판" });
                         break;
-                    case "BTB": this.setState({ board_Theme_Name: "자랑게시판" });
+                    case "ATB": this.setState({ board_Theme_Name: "홍보게시판" });
                         break;
                 }
 
@@ -237,11 +239,11 @@ class BoardRead extends Component {
                 updateButton =
                     <button className={"material_Button"} onClick={() => this.setState({ mode: "update" })}
                         style={{ marginBottom: "0px", width: "100%", position: "absolute", bottom: 13 }}>
-                        <h2>수정</h2>
+                        <h2><CreateOutlined style={{ verticalAlign: "bottom" }} /> 수정</h2>
                     </button>;
             }
         }
-        
+
 
         let imageNameDisplay = "none";
         let imageName = undefined;
@@ -269,7 +271,7 @@ class BoardRead extends Component {
                             </div>
                             <div style={{ width: "17%", height: "100%", marginTop: "3.5%" }}>
                                 <button className={"material_Button"} style={{ float: "right", verticalAlign: "bottom", width: "100%" }} onClick={this.openDrawer}>
-                                    <h2>댓글</h2>
+                                    <h2><CommentOutlined style={{ verticalAlign: "bottom" }} /> 댓글</h2>
                                 </button>
                             </div>
                         </div>
@@ -306,7 +308,7 @@ class BoardRead extends Component {
                                             <option style={{ color: "black" }} value={"FTB"}>자유게시판</option>
                                             <option style={{ color: "black" }} value={"HTB"}>유머게시판</option>
                                             <option style={{ color: "black" }} value={"QTB"}>질문게시판</option>
-                                            <option style={{ color: "black" }} value={"BTB"}>자랑게시판</option>
+                                            <option style={{ color: "black" }} value={"BTB"}>홍보게시판</option>
                                         </Select>
                                     </FormControl>
                                     <FormControlLabel
@@ -330,12 +332,12 @@ class BoardRead extends Component {
                         <div className={"boardList_Top_Right"}>
                             <div style={{ display: "flex", height: "70%", marginTop: "13%" }}>
                                 <button className={"material_Button"} onClick={this.boardUpdateEvent}
-                                    style={{ marginBottom: "0px", width: "50%" }}>
-                                    <h2>수정</h2>
+                                    style={{ marginBottom: "0px", width: "49%", marginRight: "0.5%" }}>
+                                    <h2><CreateOutlined style={{ verticalAlign: "bottom" }} /> 수정</h2>
                                 </button>
                                 <button className={"delete_Button"} onClick={this.boardDeleteEvent}
-                                    style={{ marginBottom: "0px", width: "50%", borderColor:"red" }}>
-                                    <h2>삭제</h2>
+                                    style={{ marginBottom: "0px", width: "49%", marginLeft: "0.5%" }}>
+                                    <h2 className={"delete_Text"}><DeleteForeverOutlined style={{ verticalAlign: "bottom" }} /> 삭제</h2>
                                 </button>
                             </div>
                         </div>
@@ -350,7 +352,7 @@ class BoardRead extends Component {
                             <button className={"material_Button"} color={"primary"} variant={"contained"} onClick={() => this.refs.inputFile.click()}
                                 onChange={this.handleImageChange} component="label" name="imageFile">
                                 <input hidden type="file" accept="image/*" ref="inputFile" />
-                                <h4>이미지 첨부</h4>
+                                <h4><AddPhotoAlternateOutlined style={{ verticalAlign: "bottom" }} /> 이미지 첨부</h4>
                             </button>
                         </div>
                     </div>

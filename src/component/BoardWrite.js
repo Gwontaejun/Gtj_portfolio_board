@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import firestore from './store/fireStore';
 import './css/itemCss.css';
 import { Checkbox, Chip, FormControl, FormControlLabel, Select } from '@material-ui/core';
+import { AddPhotoAlternateOutlined, CreateOutlined } from '@material-ui/icons';
 
 class BoardWrite extends Component {
     constructor(props) {
@@ -173,7 +174,7 @@ class BoardWrite extends Component {
                                                 <option style={{ color: "black" }} value={"FTB"}>자유게시판</option>
                                                 <option style={{ color: "black" }} value={"HTB"}>유머게시판</option>
                                                 <option style={{ color: "black" }} value={"QTB"}>질문게시판</option>
-                                                <option style={{ color: "black" }} value={"BTB"}>자랑게시판</option>
+                                                <option style={{ color: "black" }} value={"ATB"}>홍보게시판</option>
                                             </Select>
                                         </FormControl>
                                         <FormControlLabel
@@ -197,7 +198,7 @@ class BoardWrite extends Component {
                             <div className={"boardList_Top_Right"}>
                                 <button className={"material_Button"} startIcon={""} color={"primary"} variant={"contained"} onClick={this.boardWriteEvent}
                                     style={{ marginBottom: "0px", width: "100%", position: "absolute", bottom: 13 }}>
-                                    <h2>글작성</h2>
+                                    <h2><CreateOutlined style={{ verticalAlign: "bottom" }} /> 글작성</h2>
                                 </button>
                             </div>
                         </div>
@@ -211,7 +212,7 @@ class BoardWrite extends Component {
                                 <button className={"material_Button"} color={"primary"} variant={"contained"} onClick={() => this.refs.inputFile.click()}
                                     onChange={this.handleImageChange} component="label" name="imageFile">
                                     <input hidden type="file" accept="image/*" ref="inputFile" />
-                                    <h4>이미지 첨부</h4>
+                                    <h4><AddPhotoAlternateOutlined style={{ verticalAlign: "bottom" }} /> 이미지 첨부</h4>
                                 </button>
                             </div>
                         </div>

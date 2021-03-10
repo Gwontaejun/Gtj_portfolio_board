@@ -1,4 +1,5 @@
 import { Button, Card, CardContent, Drawer, TextField, Typography } from "@material-ui/core";
+import { CommentOutlined, CreateOutlined } from "@material-ui/icons";
 import React, { Component } from "react";
 import firestore from '../store/fireStore';
 
@@ -69,10 +70,10 @@ export default class CommentDrawer extends Component {
                 >
                     <div style={{ width: "400px", height: "100%" }}>
                         <div style={{ height: "7%", width: "100%", textAlign: "center", borderBottom: "black 1px solid" }}>
-                            <h1 style={{ marginTop: "5%", marginBottom: "5%" }}>댓글</h1>
+                            <h1 style={{ marginTop: "5%", marginBottom: "5%" }}><CommentOutlined /> 댓글</h1>
                         </div>
                         <div style={{ height: "75%", width: "100%", overflowY: "auto" }}>
-                            {this.state.comment_Data.map((data, index) => { 
+                            {this.state.comment_Data.map((data, index) => {
                                 const secondsToDate = new Date(data.Comment_WriteDate.seconds * 1000);
                                 const fullDate = secondsToDate.getFullYear() + "년" + (secondsToDate.getMonth() + 1) + "월" + secondsToDate.getDate() + "일";
                                 return (
@@ -85,14 +86,14 @@ export default class CommentDrawer extends Component {
                                                 {data.User_Name} / {fullDate}
                                             </Typography>
                                             <Typography color="textSecondary">
-                                                
+
                                             </Typography>
                                         </CardContent>
                                     </Card>
                                 )
                             })}
                         </div>
-                        <div style={{ display: "flex", height: "14.5%", width: "100%", borderTop: "black 1px solid" }}>
+                        <div style={{ display: "flex", height: "15%", width: "100%", borderTop: "black 1px solid" }}>
                             <textarea
                                 variant={"outlined"} onChange={this.handleChange} value={this.state.comment_Content}
                                 style={{ width: "70%", height: "100%", resize: "none", fontSize: "150%" }}
@@ -104,7 +105,7 @@ export default class CommentDrawer extends Component {
                                 }}
                             />
                             <Button color="primary" variant="contained" style={{ width: "30%", height: "100%" }} onClick={this.commentWrite}>
-                                <h2>작성</h2>
+                                <h2><CreateOutlined style={{ verticalAlign: "middle" }} /> 작성</h2>
                             </Button>
                         </div>
                     </div>

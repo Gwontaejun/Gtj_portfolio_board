@@ -8,22 +8,29 @@ class CountList extends Component {
     super(props);
 
     this.state = { board_Data: [] };
+
+    this.firebaseSetting = this.firebaseSetting.bind(this);
   }
 
   componentWillMount() {
+    console.log("Count_List render");
+    this.firebaseSetting();
+  }
+
+  firebaseSetting() {
     let orderType;
     if (this.props.hiddenType !== undefined) {
       orderType = this.props.hiddenType;
-    }else {
+    } else {
       orderType = this.props.orderType;
     }
 
     firestore.firestore.firestore().collection("Board")
-        .orderBy(orderType, "desc").limit(4).get().then((querySnapshot) => {
-          querySnapshot.forEach((doc) => {
-            this.setState({ board_Data: this.state.board_Data.concat(doc.data()) });
-          });
-        })
+      .orderBy(orderType, "desc").limit(4).get().then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          this.setState({ board_Data: this.state.board_Data.concat(doc.data()) });
+        });
+      })
   }
 
   render() {

@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import store from '../component/store/store';
 import LoginoutButton from './Items/LoginoutButton';
 import SearchBar from './Items/SearchBar';
+import { Brightness4Outlined } from '@material-ui/icons';
 
 class Header extends Component {
   constructor(props) {
@@ -34,20 +35,22 @@ class Header extends Component {
               <div className={"header_Left"}>
                 <Typography variant="h3">
                   <Link to="/" style={{ color: "white", marginLeft: "15%" }}>
-                    GTJ
+                    J's Board
                   </Link>
                 </Typography>
               </div>
               <div className={"header_Center"}>
-                <SearchBar/>
+                <SearchBar />
               </div>
               <div className={"header_Right"}>
-                <LoginoutButton ButtonType={this.props.ButtonType} ButtonColor={this.props.ButtonColor} /> {/*로그인 및 로그아웃 버튼*/}
-                <div style={{display:"flex", alignItems:"center", width:"23%"}}>
-                  <Button variant={this.props.ButtonType} color={this.props.ButtonColor} onClick={function () {
+                <LoginoutButton ButtonType={this.props.ButtonType} ButtonColor={"secondary"} /> {/*로그인 및 로그아웃 버튼*/}
+                <div style={{ display: "flex", alignItems: "center", width: "25%" }}>
+                  <Button style={{ width: "100%" }} variant={this.props.ButtonType} color={this.props.ButtonColor} onClick={function () {
                     store.dispatch({ type: 'ModeConverter' });
                   }}
-                  >{this.props.ButtonText}</Button> {/*다크모드 및 라이트모드 버튼*/}
+                  >
+                    <Brightness4Outlined style={{ marginRight: "3%" }} />{this.props.ButtonText}
+                  </Button> {/*다크모드 및 라이트모드 버튼*/}
                 </div>
               </div>
             </Toolbar>

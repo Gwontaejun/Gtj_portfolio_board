@@ -8,8 +8,8 @@ class SearchBar extends Component {
         super(props);
 
         this.state = {
-            searchType:"Board_Title",
-            searchText:""
+            searchType: "Board_Title",
+            searchText: ""
         }
 
         this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
@@ -17,18 +17,18 @@ class SearchBar extends Component {
         this.handleChange = this.handleChange.bind(this);
     }
 
-    handleCheckboxChange(e){
-        this.setState({searchType:e.target.value});
+    handleCheckboxChange(e) {
+        this.setState({ searchType: e.target.value });
     }
 
-    searchButtonClick(){
-        if(this.state.searchText !== ""){
+    searchButtonClick() {
+        if (this.state.searchText !== "") {
             this.props.history.push('/Search/' + this.state.searchType + "/" + this.state.searchText);
-        }else alert("검색값을 넣어주십시오.");
+        } else alert("검색값을 넣어주십시오.");
     }
 
-    handleChange(e){
-        this.setState({searchText : e.target.value});
+    handleChange(e) {
+        this.setState({ searchText: e.target.value });
     }
     render() {
         return (
@@ -56,7 +56,7 @@ class SearchBar extends Component {
                     value={this.state.searchText}
                 />
                 <IconButton onClick={this.searchButtonClick}>
-                    <SearchIcon color="action" fontSize="large"/>
+                    <SearchIcon color="action" fontSize="large" />
                 </IconButton>
             </div>
         );

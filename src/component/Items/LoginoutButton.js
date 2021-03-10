@@ -2,6 +2,7 @@ import { Component } from "react";
 import firestore from '../store/fireStore';
 import firebase from 'firebase/app'
 import Button from '@material-ui/core/Button';
+import { PowerSettingsNew } from "@material-ui/icons";
 
 class LoginoutButton extends Component {
     constructor(props) {
@@ -17,7 +18,7 @@ class LoginoutButton extends Component {
     /*로그인 및 로그아웃 함수*/
     Loginout() {
         const currentUser = firestore.firestore.auth().currentUser;
-        
+
         if (this.state.LoginData === null) {
             if (currentUser === null) {
                 var provider = new firebase.auth.GoogleAuthProvider();
@@ -57,7 +58,7 @@ class LoginoutButton extends Component {
         return (
             <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", marginRight: "2%", width: "80%" }}>
                 <div style={{ display: NameType, marginRight: "5%" }}><h2>{NameText}</h2></div>
-                <Button color={this.props.ButtonColor} variant={this.props.ButtonType} onClick={this.Loginout}>{ButtonText}</Button>
+                <Button color={this.props.ButtonColor} variant={this.props.ButtonType} onClick={this.Loginout}><PowerSettingsNew style={{ marginRight: "5%" }} /> {ButtonText}</Button>
             </div>
         )
     }

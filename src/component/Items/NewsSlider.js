@@ -48,11 +48,15 @@ export default class NewsSlider extends Component {
             <div className={"slider_Div"} style={{ width: "60%" }}>
                 <Slider {...settings}>
                     {this.state.newsData.map((data) => {
+                        let newsTitle;
+                        if(data.title.length > 50){
+                            newsTitle = data.title.substring(0,50)+"...";
+                        }else newsTitle = data.title;
                         return (
                             <div key={""}>
                                 <a href={data.url} style={{ textDecoration: "none", display: "flex" }}>
                                     <h4 style={{ color: this.props.color }}>
-                                        {data.title}
+                                        {newsTitle}
                                     </h4>
                                 </a>
                             </div>

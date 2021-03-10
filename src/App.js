@@ -13,20 +13,20 @@ import './component/css/itemCss.css';
 import store from './component/store/store';
 
 class App extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-    
+
     this.state = {
-      mode : true,
+      mode: true,
     }
   }
 
   componentWillMount() {
-    store.subscribe(function() {
-      this.setState({mode : store.getState().mode});
+    store.subscribe(function () {
+      this.setState({ mode: store.getState().mode });
     }.bind(this));
   }
-  
+
   render() {
     let mode = this.state.mode;
     let headerClassName = "";
@@ -36,14 +36,14 @@ class App extends Component {
     let ButtonColor = "";
     let backgroundColor = "";
 
-    if(mode === true){
+    if (mode === true) {
       headerClassName = "header_LightMode";
       DarkorLightMode = "lightmode";
       ButtonType = "contained";
       ButtonText = "다크 모드로";
       ButtonColor = "primary";
       backgroundColor = "white";
-    }else if(mode === false){
+    } else if (mode === false) {
       headerClassName = "header_DarkMode";
       DarkorLightMode = "darkmode";
       ButtonType = "outlined";
@@ -51,7 +51,7 @@ class App extends Component {
       ButtonColor = "inherit";
       backgroundColor = "#1e1f21";
     }
-    
+
     return (
       <BrowserRouter>
         <div className="app" style={{ backgroundColor: backgroundColor }}>

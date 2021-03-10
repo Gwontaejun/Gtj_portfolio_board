@@ -6,7 +6,7 @@ class Dashboard extends Component {
     return (
       <div className={"boardMain"}>
         <div className={"boardMainWraper"}>
-          <Section/>
+          <Section />
         </div>
       </div>
     );

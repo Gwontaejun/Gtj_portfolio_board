@@ -4,12 +4,13 @@ import firestore from './store/fireStore';
 import './css/itemCss.css';
 import { Link } from 'react-router-dom';
 import store from './store/store';
+import { CreateOutlined } from '@material-ui/icons';
 
 class BoardList extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { mode:true, board_Data: [], board_Title: "", board_Desc: "" }
+    this.state = { mode: true, board_Data: [], board_Title: "", board_Desc: "" }
 
     this.firebaseSetting = this.firebaseSetting.bind(this);
   }
@@ -19,8 +20,8 @@ class BoardList extends Component {
       렌더를 하기전에 this.firebaseSetting을 호출함.*/
   componentWillMount() {
     this.firebaseSetting();
-    store.subscribe(function() {
-      this.setState({mode : store.getState().mode});
+    store.subscribe(function () {
+      this.setState({ mode: store.getState().mode });
     }.bind(this));
   }
 
@@ -58,7 +59,7 @@ class BoardList extends Component {
         break;
       case "QTB": this.setState({ board_Title: "질문게시판", board_Desc: "모르는게 있을땐?" });
         break;
-      case "BTB": this.setState({ board_Title: "자랑게시판", board_Desc: "나 이런사람이야~~" });
+      case "ATB": this.setState({ board_Title: "홍보게시판", board_Desc: "이것좀 봐주세요~!" });
         break;
     }
   }
@@ -76,8 +77,8 @@ class BoardList extends Component {
               </div>
               <div className={"boardList_Top_Right"}>
                 <Link to="/Write">
-                  <button className={"material_Button"} style={{ marginBottom: "0px", position: "absolute", bottom: 13, width:"100%" }}>
-                    <h2>글쓰기</h2>
+                  <button className={"material_Button"} style={{ marginBottom: "0px", position: "absolute", bottom: 13, width: "100%" }}>
+                    <h2><CreateOutlined style={{ verticalAlign: "bottom" }} /> 글쓰기</h2>
                   </button>
                 </Link>
               </div>
