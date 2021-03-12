@@ -16,21 +16,31 @@ export default class NewsSlider extends Component {
         this.newsSetting = this.newsSetting.bind(this);
     }
 
+    // 컴포넌트가 렌더되기 전에 실행하는 함수.
     componentWillMount() {
         this.newsSetting();
     }
 
+    // Newscatcher의 news api를 axios를 사용해 값을 가져오는 함수.
     newsSetting() {
-        const apiKey = '7243fbc0acb6424d9028bc33d8ebedb3';
-        const url = `https://newsapi.org/v2/top-headlines?country=kr&apiKey=${apiKey}`;
+        const options = {
+            method: 'GET',
+            url: 'https://newscatcher.p.rapidapi.com/v1/latest_headlines',
+            params: { topic: 'news', lang: 'ko', country: 'KR', media: 'True' },
+            headers: {
+                'x-rapidapi-key': 'ce92e4a296mshe54914af46c4e3fp1cd09bjsn9c0a1beb1fd4',
+                'x-rapidapi-host': 'newscatcher.p.rapidapi.com'
+            }
+        };
 
-        axios.get(url)
-            .then(res => {
-                const data = res.data.articles;
-                this.setState({
-                    newsData: this.state.newsData.concat(data),
-                });
-            })
+        axios.request(options).then(function (response) {
+            console.log(response.data);
+            this.setState({
+                newsData: this.state.newsData.concat(response.data.articles),
+            });
+        }.bind(this)).catch(function (error) {
+            console.error(error);
+        });
     }
 
     render() {
@@ -48,15 +58,11 @@ export default class NewsSlider extends Component {
             <div className={"slider_Div"} style={{ width: "60%" }}>
                 <Slider {...settings}>
                     {this.state.newsData.map((data) => {
-                        let newsTitle;
-                        if(data.title.length > 50){
-                            newsTitle = data.title.substring(0,50)+"...";
-                        }else newsTitle = data.title;
                         return (
                             <div key={""}>
-                                <a href={data.url} style={{ textDecoration: "none", display: "flex" }}>
+                                <a href={data.link} style={{ textDecoration: "none", display: "flex" }}>
                                     <h4 style={{ color: this.props.color }}>
-                                        {newsTitle}
+                                        {data.title+"..."}
                                     </h4>
                                 </a>
                             </div>

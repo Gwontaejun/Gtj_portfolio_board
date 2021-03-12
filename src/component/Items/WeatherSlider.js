@@ -16,7 +16,9 @@ export default class WeatherSlider extends Component {
         this.weatherSetting = this.weatherSetting.bind(this);
     }
 
+    // 컴포넌트가 렌더되기 전에 실행하는 함수.
     componentWillMount() {
+        // 5개의 도시만 선정해서 날씨를 가져옴.
         this.weatherSetting("Seoul", "서울");
         this.weatherSetting("Busan", "부산");
         this.weatherSetting("Incheon", "인천");
@@ -24,10 +26,11 @@ export default class WeatherSlider extends Component {
         this.weatherSetting("Jeju City", "제주");
     }
 
+    // Openweather의 날씨 api를 axios를 사용해 값을 가져오는 함수
     weatherSetting(city, cityKRName) {
         const cityName = city;
         const apiKey = '603256df3e8c6937e084b42b21843524';
-        const url = `http://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}&units=metric`;
+        const url = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}&units=metric`;
 
         axios.get(url)
             .then(res => {

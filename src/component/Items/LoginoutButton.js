@@ -28,6 +28,7 @@ class LoginoutButton extends Component {
                         var user = result.user;
                         window.localStorage.setItem("LoginData", JSON.stringify(user));
                         this.setState({ LoginData: window.localStorage.getItem("LoginData") });
+                        window.location.reload();
                     }).catch((error) => {
                     });
             } else if (currentUser !== null) {

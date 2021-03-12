@@ -21,6 +21,7 @@ class App extends Component {
     }
   }
 
+  // 컴포넌트가 렌더되기 전에 실행하는 함수.
   componentWillMount() {
     store.subscribe(function () {
       this.setState({ mode: store.getState().mode });
@@ -36,6 +37,7 @@ class App extends Component {
     let ButtonColor = "";
     let backgroundColor = "";
 
+    // 다크모드, 라이트모드시 각각 다른 스타일 값을 지정함 (true = 라이트모드, false = 다크모드)
     if (mode === true) {
       headerClassName = "header_LightMode";
       DarkorLightMode = "lightmode";

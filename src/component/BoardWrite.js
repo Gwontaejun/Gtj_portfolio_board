@@ -31,16 +31,19 @@ class BoardWrite extends Component {
         this.handleUserNameInvisible = this.handleUserNameInvisible.bind(this);
     }
 
+    // 컴포넌트가 렌더 되기 전에 실행하는 함수.
     componentWillMount() {
+        // 현재 글 번호를 알기위해 데이터를 가져오는 작업.
         firestore.firestore.firestore().collection("Count").doc("Board_Count").get().then((doc) => {
             this.setState({ Count: doc.data() });
         });
     }
 
 
-
+    // 이미지 첨부 후 글 작성버튼을 눌렀을때 실행하는 함수.
     fileUpload(Image_Name) {
         const storageRef = firestore.firestore.storage().ref();
+        const Board_Theme = this.state.board_Theme;
 
         var metadata = {
             contentType: 'image/*'
@@ -48,19 +51,20 @@ class BoardWrite extends Component {
 
         var uploadTask = storageRef.child('images/' + Image_Name)
             .put(this.state.imageFile, metadata);
-
+        
+        // 이미지 업로드 작업.
         uploadTask.on(firestore.firestore.storage.TaskEvent.STATE_CHANGED,
             function (snapshot) {
-                switch (snapshot.state) {
-                    case firestore.firestore.storage.TaskState.PAUSED:
-                        break;
-                    case firestore.firestore.storage.TaskState.RUNNING:
-                        break;
+                var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+
+                // 이미지 업로드가 완료가 되면 게시판 글 목록으로 이동하도록 함.
+                if(progress === 100){
+                    window.location.href = '/Theme/' + Board_Theme;
                 }
             });
     }
 
-
+    // 글 작성버튼을 눌렀을때 실행하는 함수.
     firebaseWriteData() {
         let Image_Name;
         const Board_Code = this.state.board_Theme + "_" + (parseInt(this.state.Count[this.state.board_Theme + "_Count"]) + 1);
@@ -69,14 +73,17 @@ class BoardWrite extends Component {
         let User_Name;
         const Board_Theme = this.state.board_Theme;
 
+        // 이름 비공개 버튼을 누르면 이름이 비공개값으로 들어가도록 하기 위함.
         if (this.state.userNameInvisible === false) {
             User_Name = firestore.firestore.auth().currentUser.displayName;
         } else User_Name = "비공개";
 
+        // 이미지가 첨부되었는지 확인하기 위함.
         if (this.state.imageFile.name === undefined) {
             Image_Name = "";
         } else Image_Name = Board_Code + "-" + this.state.imageFile.name;
 
+        // 글 작성을 하는 작업(FireStore에 값을 저장하는 작업)
         firestore.firestore.firestore().collection("Board").doc(Board_Code).set({
             Board_No: Board_No,
             Board_Theme: Board_Theme,
@@ -93,18 +100,22 @@ class BoardWrite extends Component {
             .then((docRef) => {
                 if (this.state.imageFile.length !== 0) {
                     this.fileUpload(Image_Name);
+                }else {
+                    window.location.href = '/Theme/' + Board_Theme;
                 }
-
+                
+                // 글 작성시 해당 테마의 글 번호를 1추가 시켜줌.
                 firestore.firestore.firestore().collection("Count").doc("Board_Count").update({
                     All_Count: firestore.firestore.firestore.FieldValue.increment(1),
                     [Board_Theme + "_Count"]: firestore.firestore.firestore.FieldValue.increment(1),
                 });
-
-                this.props.history.push('/Theme/' + Board_Theme);
+                
+                
             })
     }
 
     boardWriteEvent() {
+        // 글 제목, 게시판종류가 빈값인지 확인 후 빈값이 아니라면 글작성을 실행.
         if (this.state.board_Title.length !== 0) {
             if (this.state.board_Theme.length !== 0) {
                 this.firebaseWriteData();
@@ -118,7 +129,7 @@ class BoardWrite extends Component {
     }
 
 
-
+    // 전반적인 input의 데이터를 state에 넣어주는 함수.
     handleChange(e) {
         const stateName = e.target.name;
 
@@ -127,15 +138,18 @@ class BoardWrite extends Component {
         });
     }
 
+    // 이미지 첨부 시 state에 이미지 데이터를 넣어주기 위해 실행하는 함수.
     handleImageChange(e) {
         const file = Array.from(e.target.files);
         this.setState({ imageFile: file[0] });
     }
 
+    // 이미지를 첨부 후 위에 뜨는 chip의 x버튼을 눌렀을때 사라지도록 하는 함수.
     handleDelete() {
         this.setState({ imageFile: "" });
     }
 
+    // 작성자를 비공개로할지 결정하는 함수
     handleUserNameInvisible(e) {
         this.setState({ userNameInvisible: e.target.checked });
     }
@@ -146,6 +160,7 @@ class BoardWrite extends Component {
         let imageNameDisplay = "none";
         let imageName = undefined;
 
+        // 이미지 첨부 버튼을 눌러 이미지를 첨부 후 위에 뜨는 chip의 보여지는 여부.
         if (this.state.imageFile === "" || this.state.imageFile === undefined) {
             imageNameDisplay = "none";
         } else {

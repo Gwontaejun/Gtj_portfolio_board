@@ -12,11 +12,13 @@ class CountList extends Component {
     this.firebaseSetting = this.firebaseSetting.bind(this);
   }
 
+  // 컴포넌트가 렌더되기 전에 실행하는 함수.
   componentWillMount() {
-    console.log("Count_List render");
     this.firebaseSetting();
   }
 
+  /*파이어베이스의 파이어스토어의 값을 불러와서
+    this.state.board_Data에 넣어주고있음. */
   firebaseSetting() {
     let orderType;
     if (this.props.hiddenType !== undefined) {
@@ -25,6 +27,7 @@ class CountList extends Component {
       orderType = this.props.orderType;
     }
 
+    // orderType에 따라 정렬을 하고 그 값을 4개까지만 가져오도록 하는 작업.
     firestore.firestore.firestore().collection("Board")
       .orderBy(orderType, "desc").limit(4).get().then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
@@ -68,9 +71,6 @@ class CountList extends Component {
               autoHeight
               showColumnRightBorder={true}
             />
-            {/* {this.state.data.map((item, index) => (
-              <Typography variant="h5" style={{marginTop:"3%", marginLeft:"5%", height:"16%"}} key={item.Board_Code}>{index+1}.<a href={"/Read/"+item.Board_Code}>{item.Board_Title}</a></Typography>
-            ))} */}
           </div>
         </div>
       </div>

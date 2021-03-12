@@ -42,9 +42,9 @@ class BoardList extends Component {
     var board_Data_Array = [];
     const board_Theme = this.props.match.params.Board_Theme;
 
+    // 게시판의 테마를 정하여 값을 불러오는 함수.(게시판 종류에 따라)
     firestore.firestore.firestore().collection("Board")
       .where("Board_Theme", "==", board_Theme).get().then((querySnapshot) => {
-        //oracle의 문법으로 select * from Board where Board_Theme = this...; 과 같음.
         querySnapshot.forEach((doc) => {
           board_Data_Array = board_Data_Array.concat(doc.data());
           //데이터를 복제하여 concat으로 붙여넣어 데이터의 불변성을 유지함.
@@ -52,6 +52,7 @@ class BoardList extends Component {
         this.setState({ board_Data: board_Data_Array });
       });
 
+    // 게시판의 테마에따라 보여지는 값이 달라지게 하기위함.
     switch (board_Theme) {
       case "FTB": this.setState({ board_Title: "자유게시판", board_Desc: "시간날때마다 보는?" });
         break;
@@ -64,7 +65,19 @@ class BoardList extends Component {
     }
   }
 
+
   render() {
+    let writeButton;
+
+    // 현재 로그인상태일시 글쓰기 버튼이 활성화되도록 함.
+    if (firestore.firestore.auth().currentUser !== null) {
+      writeButton =
+        <Link to="/Write">
+          <button className={"material_Button"} style={{ marginBottom: "0px", position: "absolute", bottom: 13, width: "100%" }}>
+            <h2><CreateOutlined style={{ verticalAlign: "bottom" }} /> 글쓰기</h2>
+          </button>
+        </Link>
+    }
 
     return (
       <div className={"boardMain"}>
@@ -76,11 +89,7 @@ class BoardList extends Component {
                 <h2 style={{ fontSize: "300%", marginBottom: "0px", height: "70%", position: "absolute", bottom: 0 }}>{this.state.board_Title}</h2>
               </div>
               <div className={"boardList_Top_Right"}>
-                <Link to="/Write">
-                  <button className={"material_Button"} style={{ marginBottom: "0px", position: "absolute", bottom: 13, width: "100%" }}>
-                    <h2><CreateOutlined style={{ verticalAlign: "bottom" }} /> 글쓰기</h2>
-                  </button>
-                </Link>
+                {writeButton}
               </div>
             </div>
             <div className={"boardList_Bottom"}>
