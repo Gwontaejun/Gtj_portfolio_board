@@ -3,7 +3,8 @@
 본래의 게시판기능과 자주사용하는 웹사이트의 기능들을 조금씩 붙여서 넣어서 프로젝트를 만듦.
 
 기술스택
-Html,Css,React,Firebase
+Front-End : Html,Css,React
+Back-End : Firebase
 
 ---------------------------------------
 ## 폴더 및 파일 정리설명
