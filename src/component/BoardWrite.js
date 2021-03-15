@@ -21,14 +21,6 @@ class BoardWrite extends Component {
         }
 
         this.board_Title = null;
-
-        this.firebaseWriteData = this.firebaseWriteData.bind(this);
-        this.boardWriteEvent = this.boardWriteEvent.bind(this);
-        this.handleChange = this.handleChange.bind(this);
-        this.fileUpload = this.fileUpload.bind(this);
-        this.handleImageChange = this.handleImageChange.bind(this);
-        this.handleDelete = this.handleDelete.bind(this);
-        this.handleUserNameInvisible = this.handleUserNameInvisible.bind(this);
     }
 
     // 컴포넌트가 렌더 되기 전에 실행하는 함수.
@@ -41,7 +33,7 @@ class BoardWrite extends Component {
 
 
     // 이미지 첨부 후 글 작성버튼을 눌렀을때 실행하는 함수.
-    fileUpload(Image_Name) {
+    fileUpload = (Image_Name) => {
         const storageRef = firestore.firestore.storage().ref();
         const Board_Theme = this.state.board_Theme;
 
@@ -65,7 +57,7 @@ class BoardWrite extends Component {
     }
 
     // 글 작성버튼을 눌렀을때 실행하는 함수.
-    firebaseWriteData() {
+    firebaseWriteData = () => {
         let Image_Name;
         const Board_Code = this.state.board_Theme + "_" + (parseInt(this.state.Count[this.state.board_Theme + "_Count"]) + 1);
         const Board_No = this.state.Count.All_Count + 1;
@@ -114,7 +106,7 @@ class BoardWrite extends Component {
             })
     }
 
-    boardWriteEvent() {
+    boardWriteEvent = () => {
         // 글 제목, 게시판종류가 빈값인지 확인 후 빈값이 아니라면 글작성을 실행.
         if (this.state.board_Title.length !== 0) {
             if (this.state.board_Theme.length !== 0) {
@@ -130,7 +122,7 @@ class BoardWrite extends Component {
 
 
     // 전반적인 input의 데이터를 state에 넣어주는 함수.
-    handleChange(e) {
+    handleChange = (e) => {
         const stateName = e.target.name;
 
         this.setState({
@@ -139,18 +131,18 @@ class BoardWrite extends Component {
     }
 
     // 이미지 첨부 시 state에 이미지 데이터를 넣어주기 위해 실행하는 함수.
-    handleImageChange(e) {
+    handleImageChange = (e) => {
         const file = Array.from(e.target.files);
         this.setState({ imageFile: file[0] });
     }
 
     // 이미지를 첨부 후 위에 뜨는 chip의 x버튼을 눌렀을때 사라지도록 하는 함수.
-    handleDelete() {
+    handleDelete = () => {
         this.setState({ imageFile: "" });
     }
 
     // 작성자를 비공개로할지 결정하는 함수
-    handleUserNameInvisible(e) {
+    handleUserNameInvisible = (e) => {
         this.setState({ userNameInvisible: e.target.checked });
     }
 

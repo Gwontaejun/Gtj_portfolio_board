@@ -8,8 +8,6 @@ class CountList extends Component {
     super(props);
 
     this.state = { board_Data: [] };
-
-    this.firebaseSetting = this.firebaseSetting.bind(this);
   }
 
   // 컴포넌트가 렌더되기 전에 실행하는 함수.
@@ -19,7 +17,7 @@ class CountList extends Component {
 
   /*파이어베이스의 파이어스토어의 값을 불러와서
     this.state.board_Data에 넣어주고있음. */
-  firebaseSetting() {
+  firebaseSetting = () => {
     let orderType;
     if (this.props.hiddenType !== undefined) {
       orderType = this.props.hiddenType;

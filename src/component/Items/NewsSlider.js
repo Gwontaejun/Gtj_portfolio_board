@@ -12,8 +12,6 @@ export default class NewsSlider extends Component {
         this.state = {
             newsData: [],
         }
-
-        this.newsSetting = this.newsSetting.bind(this);
     }
 
     // 컴포넌트가 렌더되기 전에 실행하는 함수.
@@ -22,7 +20,7 @@ export default class NewsSlider extends Component {
     }
 
     // Newscatcher의 news api를 axios를 사용해 값을 가져오는 함수.
-    newsSetting() {
+    newsSetting = () => {
         const options = {
             method: 'GET',
             url: 'https://newscatcher.p.rapidapi.com/v1/latest_headlines',

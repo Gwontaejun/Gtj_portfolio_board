@@ -12,8 +12,6 @@ export default class WeatherSlider extends Component {
         this.state = {
             weatherData: [],
         }
-
-        this.weatherSetting = this.weatherSetting.bind(this);
     }
 
     // 컴포넌트가 렌더되기 전에 실행하는 함수.
@@ -27,7 +25,7 @@ export default class WeatherSlider extends Component {
     }
 
     // Openweather의 날씨 api를 axios를 사용해 값을 가져오는 함수
-    weatherSetting(city, cityKRName) {
+    weatherSetting = (city, cityKRName) => {
         const cityName = city;
         const apiKey = '603256df3e8c6937e084b42b21843524';
         const url = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}&units=metric`;

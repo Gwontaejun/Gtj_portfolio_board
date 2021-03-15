@@ -30,18 +30,6 @@ class BoardRead extends Component {
         }
 
         this.Board_Title = null;
-
-        this.firebaseSetting = this.firebaseSetting.bind(this);
-        this.firebaseUpdateData = this.firebaseUpdateData.bind(this);
-        this.boardUpdateEvent = this.boardUpdateEvent.bind(this);
-        this.boardDeleteEvent = this.boardDeleteEvent.bind(this);
-        this.handleChange = this.handleChange.bind(this);
-        this.fileUpload = this.fileUpload.bind(this);
-        this.handleImageChange = this.handleImageChange.bind(this);
-        this.handleDelete = this.handleDelete.bind(this);
-        this.handleUserNameInvisible = this.handleUserNameInvisible.bind(this);
-        this.openDrawer = this.openDrawer.bind(this);
-        this.closeDrawer = this.closeDrawer.bind(this);
     }
 
     // 컴포넌트가 렌더 되기 전에 실행하는 함수. 
@@ -62,7 +50,7 @@ class BoardRead extends Component {
     }
 
     // 글 수정을 할때 수정하려는 이미지의 업로드를 위한 함수.
-    fileUpload(Image_Name) {
+    fileUpload = (Image_Name) => {
         const storageRef = firestore.firestore.storage().ref();
 
         var metadata = {
@@ -79,7 +67,7 @@ class BoardRead extends Component {
     }
 
     // 글 수정시 실행하는 함수.
-    firebaseUpdateData() {
+    firebaseUpdateData = () => {
         let Image_Name;
         const Board_Code = this.state.board_Data.Board_Code;
         const Board_No = this.state.board_Data.Board_No;
@@ -121,7 +109,7 @@ class BoardRead extends Component {
     }
 
     // 글쓰기와 동일하게 글 제목 및 게시판종류의 빈값이 있는 확인.
-    boardUpdateEvent() {
+    boardUpdateEvent = () => {
         if (this.state.board_Title.length !== 0) {
             if (this.state.board_Theme.length !== 0) {
                 this.firebaseUpdateData();
@@ -135,7 +123,7 @@ class BoardRead extends Component {
     }
 
     // 글 삭제버튼 클릭시 실행하는 함수.
-    boardDeleteEvent() {
+    boardDeleteEvent = () => {
         if (this.state.board_Data.Image_Name !== "") {
             const storageRef = firestore.firestore.storage().ref();
             const imageRef = storageRef.child('images/' + this.state.board_Data.Image_Name);
@@ -158,7 +146,7 @@ class BoardRead extends Component {
 
 
     // 전반적인 input의 데이터를 state에 넣어주는 함수.
-    handleChange(e) {
+    handleChange = (e) =>{
         const stateName = e.target.name;
 
         this.setState({
@@ -167,24 +155,24 @@ class BoardRead extends Component {
     }
 
     // 이미지 첨부 시 state에 이미지 데이터를 넣어주기 위해 실행하는 함수.
-    handleImageChange(e) {
+    handleImageChange = (e) => {
         const file = Array.from(e.target.files);
         this.setState({ imageFile: file[0] });
     }
 
     // 이미지를 첨부 후 위에 뜨는 chip의 x버튼을 눌렀을때 사라지도록 하는 함수.
-    handleDelete() {
+    handleDelete = () => {
         this.setState({ imageFile: "" });
     }
 
     // 작성자를 비공개로할지 결정하는 함수
-    handleUserNameInvisible(e) {
+    handleUserNameInvisible = (e) => {
         this.setState({ userNameInvisible: e.target.checked });
     }
 
     /*파이어베이스의 파이어스토어의 값을 불러와서
     this.state.board_Data에 넣어주고있음. */
-    firebaseSetting() {
+    firebaseSetting = () => {
         let secondsToDate;
         let fullDate;
         let board_Theme;
@@ -233,11 +221,11 @@ class BoardRead extends Component {
     }
 
     // 댓글버튼 클릭시 댓글창이 뜨도록 하는 함수.
-    openDrawer() {
+    openDrawer = () => {
         this.setState({ drawerState: true });
     }
     // 댓글창을 닫는 함수.
-    closeDrawer() {
+    closeDrawer = () => {
         this.setState({ drawerState: false });
     }
 

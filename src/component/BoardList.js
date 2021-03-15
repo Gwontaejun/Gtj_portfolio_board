@@ -11,8 +11,6 @@ class BoardList extends Component {
     super(props);
 
     this.state = { mode: true, board_Data: [], board_Title: "", board_Desc: "" }
-
-    this.firebaseSetting = this.firebaseSetting.bind(this);
   }
 
   /*React Life Cycle의 한부분으로
@@ -38,7 +36,7 @@ class BoardList extends Component {
 
   /*파이어베이스의 파이어스토어의 값을 불러와서
     this.state.board_Data에 넣어주고있음. */
-  firebaseSetting() {
+  firebaseSetting = () => {
     var board_Data_Array = [];
     const board_Theme = this.props.match.params.Board_Theme;
 
@@ -69,7 +67,7 @@ class BoardList extends Component {
   render() {
     let writeButton;
 
-    // 현재 로그인상태일시 글쓰기 버튼이 활성화되도록 함.
+    // `현재 로그인상태일시 글쓰기 버튼이 활성화되도록 함.`
     if (firestore.firestore.auth().currentUser !== null) {
       writeButton =
         <Link to="/Write">

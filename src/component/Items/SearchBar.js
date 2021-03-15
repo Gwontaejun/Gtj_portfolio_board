@@ -11,19 +11,15 @@ class SearchBar extends Component {
             searchType: "Board_Title",
             searchText: ""
         }
-
-        this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
-        this.searchButtonClick = this.searchButtonClick.bind(this);
-        this.handleChange = this.handleChange.bind(this);
     }
 
     // 체크박스를 클릭할때마다 값을 변경해주는 함수.
-    handleCheckboxChange(e) {
+    handleCheckboxChange = (e) => {
         this.setState({ searchType: e.target.value });
     }
 
     // 검색값이 빈값인지 확인하는 함수.
-    searchButtonClick() {
+    searchButtonClick = () => {
         if (this.state.searchText !== "") {
             this.props.history.push('/Search/' + this.state.searchType + "/" + this.state.searchText);
             this.setState({searchText:""});
@@ -31,7 +27,7 @@ class SearchBar extends Component {
     }
 
     // 전반적인 input의 데이터를 state에 넣어주는 함수.
-    handleChange(e) {
+    handleChange = (e) => {
         this.setState({ searchText: e.target.value });
     }
 

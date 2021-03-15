@@ -11,12 +11,10 @@ class LoginoutButton extends Component {
         this.state = {
             LoginData: window.localStorage.getItem("LoginData"), //localStorage에서 값을 받아와서 Login 상태인지 확인할때 쓰는 데이터.
         }
-
-        this.Loginout = this.Loginout.bind(this);
     }
 
     /*로그인 및 로그아웃 함수*/
-    Loginout() {
+    Loginout = () => {
         const currentUser = firestore.firestore.auth().currentUser;
 
         if (this.state.LoginData === null) {

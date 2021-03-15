@@ -12,20 +12,16 @@ export default class CommentDrawer extends Component {
             comment_Data: [],
             comment_Content: ""
         };
-
-        this.firebaseSetting = this.firebaseSetting.bind(this);
-        this.handleChange = this.handleChange.bind(this);
-        this.commentWrite = this.commentWrite.bind(this);
     }
 
     // 컴포넌트가 렌더되기 전에 실행하는 함수.
     componentWillMount() {
         this.firebaseSetting();
     }
-    
+
     /*파이어베이스의 파이어스토어의 값을 불러와서
     this.state.comment_Data에 넣어주고있음. */
-    firebaseSetting() {
+    firebaseSetting = () => {
         var comment_Data_Array = [];
         const board_Code = this.props.board_Code;
 
@@ -41,12 +37,12 @@ export default class CommentDrawer extends Component {
     }
 
     // 전반적인 input의 데이터를 state에 넣어주는 함수.
-    handleChange(e) {
+    handleChange = (e) => {
         this.setState({ comment_Content: e.target.value });
     }
 
     // 댓글 작성버튼을 눌렀을때 실행하는 함수.
-    commentWrite() {
+    commentWrite = () => {
         const Auth = firestore.firestore.auth().currentUser;
         if (Auth !== null) { // 현재 로그인상태인지 확인하기 위함.
             if (this.state.comment_Content.replace(/ /g, "").length !== 0) { // 작성하려는 댓글의 빈값을 확인함.
